@@ -3,7 +3,6 @@ import {
   CircleDollarSign,
   FolderGit,
   LayoutDashboardIcon,
-  LogOutIcon,
   NotebookTabs,
   Settings,
   ShieldCheck,
@@ -22,7 +21,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { NavUser } from "./nav-user";
 
 const data = {
   navMain: [
@@ -228,13 +228,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("Etender-token");
-    navigate("/");
-  };
-
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -260,13 +253,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 text-lg text-primary"
-        >
-          <LogOutIcon />
-          Logout
-        </button>
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

@@ -10,11 +10,18 @@ import { loginSchema } from "@/schema";
 import { Form } from "../ui/form";
 import FormInput from "../Custom/FormInput";
 import FormPassword from "../Custom/FormPassword";
+import { jwtDecode } from "jwt-decode";
+import CryptoJS from "crypto-js";
+import { useGlobalStore } from "@/store/store";
+
+const SECRET_KEY = import.meta.env.VITE_APP_SECRET_KEY;
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const setUser = useGlobalStore((state) => state.setUser);
+
   const navigate = useNavigate();
 
   const form = useForm({
@@ -29,7 +36,18 @@ export function LoginForm({
     mutationFn: login,
     onSuccess: (res) => {
       if (res.status === 200) {
-        localStorage.setItem("Etender-token", res?.data?.token);
+        const token = res?.data?.token;
+        // Encrypt token before storing
+        const encryptedToken = CryptoJS.AES.encrypt(
+          token,
+          SECRET_KEY
+        ).toString();
+
+        localStorage.setItem("Etender-token", encryptedToken);
+
+        const decodedUser: any = jwtDecode(token);
+        setUser(decodedUser);
+
         navigate("/dashboard");
         toast.success("Login successful");
       }

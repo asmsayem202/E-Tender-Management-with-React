@@ -24,9 +24,6 @@ import {
 } from "@/components/ui/sidebar";
 import { useGlobalStore } from "@/store/store";
 import { useNavigate } from "react-router-dom";
-import { logout } from "@/api";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -34,22 +31,10 @@ export function NavUser() {
   const user: any = useGlobalStore((state) => state.user);
   const setUser = useGlobalStore((state) => state.setUser);
 
-  const logoutMutation = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      // console.log(res, "logout res");
-      setUser(null);
-      window.localStorage.removeItem("loyal-club-token");
-      window.localStorage.removeItem("loyal-club-user");
-      navigate("/");
-    },
-    onError: () => {
-      toast.error("Something went wrong");
-    },
-  });
-
-  const handleLogout = async () => {
-    logoutMutation.mutate();
+  const handleLogout = () => {
+    localStorage.removeItem("Etender-token");
+    navigate("/");
+    setUser(null);
   };
 
   return (
@@ -62,18 +47,13 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage
-                  src={user?.attributes?.avatar}
-                  alt={user?.attributes?.first_name}
-                />
+                <AvatarImage src={user?.avatar} alt={user?.name} />
                 <AvatarFallback className="rounded-lg">SU</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
-                  {user?.attributes?.first_name} {user?.attributes?.last_name}
-                </span>
+                <span className="truncate font-medium">{user?.name}</span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {user?.attributes?.email}
+                  {user?.email}
                 </span>
               </div>
               <MoreVerticalIcon className="ml-auto size-4" />
@@ -88,18 +68,13 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={user?.attributes?.avatar}
-                    alt={user?.attributes?.name}
-                  />
+                  <AvatarImage src={user?.avatar} alt={user?.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">
-                    {user?.attributes?.first_name} {user?.attributes?.last_name}
-                  </span>
+                  <span className="truncate font-medium">{user?.name}</span>
                   <span className="truncate text-xs text-muted-foreground">
-                    {user?.attributes?.email}
+                    {user?.email}
                   </span>
                 </div>
               </div>
@@ -122,7 +97,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={handleLogout}>
               <LogOutIcon />
-              {logoutMutation.isPending ? "Logging out..." : "Logout"}
+              Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
