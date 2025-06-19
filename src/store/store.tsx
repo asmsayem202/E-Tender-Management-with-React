@@ -1,0 +1,67 @@
+import { create } from "zustand";
+
+type State = {
+  user: any;
+  drawer: any;
+  alertModal: boolean;
+  selectedId: any;
+  selectedData: any;
+};
+
+type Actions = {
+  setUser: (user: any) => void;
+  openDrawer: (currentDrawer: any) => void;
+  closeDrawer: () => void;
+  openAlertModal: () => void;
+  closeAlertModal: () => void;
+  setSelectedId: (id: any) => void;
+  setSelectedData: (obj: any) => void;
+};
+
+export const useGlobalStore = create<State & Actions>((set) => ({
+  user: JSON.parse(localStorage.getItem("Etender-user") || "{}"),
+  drawer: null,
+  alertModal: false,
+  selectedId: null,
+  selectedData: null,
+
+  setUser: (user) => {
+    set({
+      user: user,
+    });
+  },
+
+  openDrawer: (currentDrawer) => {
+    set({
+      drawer: `${currentDrawer}`,
+    });
+  },
+
+  closeDrawer: () =>
+    set({
+      drawer: null,
+      selectedData: null,
+      selectedId: null,
+    }),
+
+  openAlertModal: () => {
+    set({
+      alertModal: true,
+    });
+  },
+
+  closeAlertModal: () =>
+    set({
+      alertModal: false,
+      selectedId: null,
+    }),
+
+  setSelectedId: (id) =>
+    set({
+      selectedId: id,
+    }),
+  setSelectedData: (obj) =>
+    set({
+      selectedData: obj,
+    }),
+}));
