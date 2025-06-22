@@ -33,6 +33,7 @@ export function NavUser() {
 
   const handleLogout = () => {
     localStorage.removeItem("Etender-token");
+    localStorage.removeItem("Etender-user");
     navigate("/");
     setUser(null);
   };

@@ -47,6 +47,7 @@ export function LoginForm({
 
         const decodedUser: any = jwtDecode(token);
         setUser(decodedUser);
+        localStorage.setItem("Etender-user", JSON.stringify(decodedUser));
 
         navigate("/dashboard");
         toast.success("Login successful");
