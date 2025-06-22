@@ -198,12 +198,6 @@ const data = {
           icon: SquareChartGantt,
         },
         {
-          title: "Department",
-          active: "department-list",
-          url: "role-authorization/department-list",
-          icon: SquareChartGantt,
-        },
-        {
           title: "User",
           active: "user-list",
           url: "role-authorization/user-list",
@@ -220,6 +214,12 @@ const data = {
           title: "Cantonment",
           active: "cantonment-list",
           url: "setting/cantonment-list",
+          icon: SquareChartGantt,
+        },
+        {
+          title: "Department",
+          active: "department-list",
+          url: "setting/department-list",
           icon: SquareChartGantt,
         },
       ],

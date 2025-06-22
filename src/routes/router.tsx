@@ -10,6 +10,7 @@ import PdfViewer from "@/pages/PdfViewer";
 import SsdListPage from "@/pages/SSD & BSD Management/Ssd/SsdListPage";
 import BsdListPage from "@/pages/SSD & BSD Management/Bsd/BsdListPage";
 import RoleListPage from "@/pages/Role Authorization/Role/RoleListPage";
+import DepartmentListPage from "@/pages/Settings/Department/DepartmentListPage";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/setting/cantonment-list",
         element: <CantonmentListPage />,
+      },
+      {
+        path: "/dashboard/setting/department-list",
+        element: <DepartmentListPage />,
       },
       {
         path: "role-authorization/role-list",
