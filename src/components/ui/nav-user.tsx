@@ -49,7 +49,11 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 {/* <AvatarImage src={user?.avatar} alt={user?.name} /> */}
-                <AvatarImage src="https://github.com/shadcn.png" />
+                {user?.avatar ? (
+                  <AvatarImage src={user.avatar} alt={user?.name} />
+                ) : (
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                )}
                 <AvatarFallback className="rounded-lg">SU</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
