@@ -100,13 +100,15 @@ const CantonmentCreationForm = ({ operation }: any) => {
     }
   };
 
-  if (isLoading)
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <Loader2 className="animate-spin" />
-        Loading...
-      </div>
-    );
+  if (operation === "update") {
+    if (isLoading)
+      return (
+        <div className="w-full h-full flex justify-center items-center">
+          <Loader2 className="animate-spin" />
+          Loading...
+        </div>
+      );
+  }
 
   return (
     <React.Fragment>

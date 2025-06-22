@@ -21,11 +21,11 @@ const GlobalAlertModal = ({ mutation }: any) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you absolutely you want to delete?
+            Are you sure you want to delete this data?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. This will permanently delete your data
+            from our server.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
