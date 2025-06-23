@@ -8,25 +8,25 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useFetchData from "@/hooks/useFetchData";
 import GlobalAlertModal from "@/components/Custom/GlobalAlertModal";
-import RoleCreationForm from "./RoleCreationForm";
-import { deleteRole, getAllRole } from "@/api/role.api";
-import type { ROLE } from "@/types/role.type";
+import { deleteUser, getAllUser } from "@/api/user.api";
+import type { USER } from "@/types/user.type";
+import UserCreationForm from "./UserCreationForm";
 
-const RoleListPage = () => {
+const UserListPage = () => {
   const setSelectedId = useGlobalStore((state) => state.setSelectedId);
   const openDrawer = useGlobalStore((state) => state.openDrawer);
   const openAlertModal = useGlobalStore((state) => state.openAlertModal);
   const closeAlertModal = useGlobalStore((state) => state.closeAlertModal);
-  const { data, isLoading, refetch } = useFetchData(["role"], () =>
-    getAllRole()
+  const { data, isLoading, refetch } = useFetchData(["user"], () =>
+    getAllUser()
   );
 
-  const role: ROLE[] = data?.data ?? [];
+  const user: USER[] = data?.data ?? [];
 
   const deleteMutation = useMutation({
-    mutationFn: deleteRole,
+    mutationFn: deleteUser,
     onSuccess: () => {
-      toast.success("Role Delete Successful");
+      toast.success("User Delete Successful");
       refetch();
       closeAlertModal();
     },
@@ -37,13 +37,13 @@ const RoleListPage = () => {
     },
   });
 
-  const actionItems = (data: ROLE) => [
+  const actionItems = (data: USER) => [
     {
       label: (
         <button
           onClick={() => {
             setSelectedId(data?.id as number);
-            openDrawer("update-role");
+            openDrawer("update-user");
           }}
           className="flex items-center gap-3 w-full cursor-pointer"
         >
@@ -71,16 +71,24 @@ const RoleListPage = () => {
   return (
     <div>
       <div className="mb-3 flex justify-between gap-2">
-        <Button onClick={() => openDrawer("create-role")}>Create Role</Button>
+        <Button onClick={() => openDrawer("create-user")}>Create User</Button>
       </div>
 
       <DataTable
         isLoading={isLoading}
-        data={role}
+        data={user}
         columns={[
           {
-            accessorKey: "name",
-            header: "Name",
+            accessorKey: "fullName",
+            header: "Full Name",
+          },
+          {
+            accessorKey: "email",
+            header: "Email",
+          },
+          {
+            accessorKey: "phoneNumber",
+            header: "Number",
           },
           {
             header: "Actions",
@@ -94,11 +102,11 @@ const RoleListPage = () => {
         ]}
       />
 
-      <GlobalDrawer name="create-role">
-        <RoleCreationForm operation="create" />
+      <GlobalDrawer name="create-user">
+        <UserCreationForm operation="create" />
       </GlobalDrawer>
-      <GlobalDrawer name="update-role">
-        <RoleCreationForm operation="update" />
+      <GlobalDrawer name="update-user">
+        <UserCreationForm operation="update" />
       </GlobalDrawer>
 
       <GlobalAlertModal mutation={deleteMutation} />
@@ -106,4 +114,4 @@ const RoleListPage = () => {
   );
 };
 
-export default RoleListPage;
+export default UserListPage;
