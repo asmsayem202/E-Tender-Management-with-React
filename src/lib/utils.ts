@@ -18,3 +18,95 @@ export function formatDateTime(date: Date): string {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+export const permissionObj = [
+  {
+    module: "SSD & BSD",
+    subModule: [
+      {
+        name: "ssd",
+        actions: ["create", "update", "delete", "index"],
+      },
+      {
+        name: "bsd",
+        actions: ["create", "update", "delete", "index"],
+      },
+    ],
+  },
+  {
+    module: "Perishable Product/Item Management",
+    subModule: [
+      {
+        name: "Parent Category",
+        actions: ["create", "update", "delete", "index"],
+      },
+      {
+        name: "Category",
+        actions: ["create", "update", "delete", "index"],
+      },
+      {
+        name: "Unit",
+        actions: ["create", "update", "delete", "index"],
+      },
+      {
+        name: "Item",
+        actions: ["create", "update", "delete", "index"],
+      },
+    ],
+  },
+  {
+    module: "Reasonable Rate Management",
+    subModule: [
+      {
+        name: "Factor",
+        actions: ["create", "update", "delete", "index"],
+      },
+      {
+        name: "Reasonable Rate",
+        actions: ["calculate"],
+      },
+    ],
+  },
+  {
+    module: "Requisition Management from BSD/SSD",
+    subModule: [],
+  },
+  {
+    module: "Supplier Management",
+    subModule: [],
+  },
+  {
+    module: "Tender Management",
+    subModule: [
+      {
+        name: "Format",
+        actions: ["create", "update", "delete", "index"],
+      },
+      {
+        name: "Tender",
+        actions: ["create", "update", "delete", "index"],
+      },
+    ],
+  },
+  {
+    module: "Reporting Module",
+    subModule: [],
+  },
+  {
+    module: "Role Authorization",
+    subModule: [
+      {
+        name: "Role",
+        actions: ["create", "update", "delete", "index"],
+      },
+      {
+        name: "Permission",
+        actions: ["create", "update", "delete", "index"],
+      },
+      {
+        name: "User",
+        actions: ["create", "update", "delete", "index"],
+      },
+    ],
+  },
+];

@@ -192,7 +192,7 @@ const UserCreationForm = ({ operation }: any) => {
           />
           <FormRadio
             form={form}
-            label="SSD/BSD"
+            label="BSD/SSD"
             name="type"
             options={[
               { name: "BSD", value: "bsdId" },

@@ -12,6 +12,7 @@ import BsdListPage from "@/pages/SSD & BSD Management/Bsd/BsdListPage";
 import RoleListPage from "@/pages/Role Authorization/Role/RoleListPage";
 import DepartmentListPage from "@/pages/Settings/Department/DepartmentListPage";
 import UserListPage from "@/pages/Role Authorization/User/UserListPage";
+import PermissionListPage from "@/pages/Role Authorization/Permission/PermissionListPage";
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: "role-authorization/role-list",
         element: <RoleListPage />,
+      },
+      {
+        path: "role-authorization/permission-list",
+        element: <PermissionListPage />,
       },
       {
         path: "role-authorization/user-list",
