@@ -82,7 +82,7 @@ const data = {
       ],
     },
     {
-      title: "Perishable Product/Item",
+      title: "Perishable Item",
       url: "perishable-product",
       icon: ShoppingBasket,
       items: [
@@ -108,12 +108,6 @@ const data = {
           title: "Item",
           active: "item-list",
           url: "perishable-product/item-list",
-          icon: SquareChartGantt,
-        },
-        {
-          title: "Market Rate",
-          active: "market-rate-list",
-          url: "perishable-product/market-rate-list",
           icon: SquareChartGantt,
         },
       ],

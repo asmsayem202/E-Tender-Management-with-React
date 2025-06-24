@@ -76,10 +76,10 @@ const UserCreationForm = ({ operation }: any) => {
         userName: user?.userName ?? "",
         email: user?.email ?? "",
         phoneNumber: user?.phoneNumber ?? "",
-        departmentId: user?.departmentId ?? "",
+        departmentId: user?.departmentId?.toString() ?? "",
         password: user?.password ?? "",
-        bsdId: user?.bsdId ?? "",
-        ssdId: user?.ssdId ?? "",
+        bsdId: user?.bsdId?.toString() ?? "",
+        ssdId: user?.ssdId?.toString() ?? "",
         roleIds: Array.isArray(user?.roles)
           ? user.roles.map((role: { roleId: string }) => role.roleId)
           : user?.roles ?? [],

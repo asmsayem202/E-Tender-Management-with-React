@@ -13,6 +13,8 @@ import RoleListPage from "@/pages/Role Authorization/Role/RoleListPage";
 import DepartmentListPage from "@/pages/Settings/Department/DepartmentListPage";
 import UserListPage from "@/pages/Role Authorization/User/UserListPage";
 import PermissionListPage from "@/pages/Role Authorization/Permission/PermissionListPage";
+import ParentCategoryListPage from "@/pages/Perishable-Item/Parent-category/ParentCategoryListPage";
+import CategoryListPage from "@/pages/Perishable-Item/Category/CategoryListPage";
 
 export const router = createBrowserRouter([
   {
@@ -40,19 +42,27 @@ export const router = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
-        path: "/dashboard/ssd-bsd/ssd-list",
+        path: "ssd-bsd/ssd-list",
         element: <SsdListPage />,
       },
       {
-        path: "/dashboard/ssd-bsd/bsd-list",
+        path: "ssd-bsd/bsd-list",
         element: <BsdListPage />,
       },
       {
-        path: "/dashboard/setting/cantonment-list",
+        path: "perishable-product/parent-category-list",
+        element: <ParentCategoryListPage />,
+      },
+      {
+        path: "perishable-product/category-list",
+        element: <CategoryListPage />,
+      },
+      {
+        path: "setting/cantonment-list",
         element: <CantonmentListPage />,
       },
       {
-        path: "/dashboard/setting/department-list",
+        path: "setting/department-list",
         element: <DepartmentListPage />,
       },
       {
