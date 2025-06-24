@@ -5,7 +5,6 @@ import { getAllSsd } from "@/api/ssd.api";
 import { createUser, getUser, updateUser } from "@/api/user.api";
 import FormInput from "@/components/Custom/FormInput";
 import FormPassword from "@/components/Custom/FormPassword";
-import FormRadio from "@/components/Custom/FormRadio";
 import FormSelect from "@/components/Custom/FormSelect";
 import { Button } from "@/components/ui/button";
 import {
@@ -79,10 +78,11 @@ const UserCreationForm = ({ operation }: any) => {
         phoneNumber: user?.phoneNumber ?? "",
         departmentId: user?.departmentId ?? "",
         password: user?.password ?? "",
-        type: user?.bsdId ? "bsdId" : "ssdId",
-        bsdId: user?.bsdId ?? undefined,
-        ssdId: user?.ssdId ?? undefined,
-        roleIds: user?.roles?.map((value: any) => value?.roleId) ?? [],
+        bsdId: user?.bsdId ?? "",
+        ssdId: user?.ssdId ?? "",
+        roleIds: Array.isArray(user?.roles)
+          ? user.roles.map((role: { roleId: string }) => role.roleId)
+          : user?.roles ?? [],
       };
       form.reset(resetData);
     }
@@ -146,14 +146,6 @@ const UserCreationForm = ({ operation }: any) => {
       );
   }
 
-  const handleTypeChange = (data: string) => {
-    if (data === "bsdId") {
-      form.setValue("ssdId", "");
-    } else if (data === "ssdId") {
-      form.setValue("bsdId", "");
-    }
-  };
-
   return (
     <React.Fragment>
       <DrawerHeader className="gap-1">
@@ -190,35 +182,21 @@ const UserCreationForm = ({ operation }: any) => {
             placeholder="Select department"
             options={departments}
           />
-          <FormRadio
+          <FormSelect
             form={form}
-            label="BSD/SSD"
-            name="type"
-            options={[
-              { name: "BSD", value: "bsdId" },
-              { name: "SSD", value: "ssdId" },
-            ]}
-            handleChange={handleTypeChange}
+            label="BSD"
+            name="bsdId"
+            placeholder="Select bsd"
+            options={bsd}
           />
-          {form.watch("type") === "bsdId" && (
-            <FormSelect
-              form={form}
-              label="BSD"
-              name="bsdId"
-              placeholder="Select bsd"
-              options={bsd}
-            />
-          )}
 
-          {form.watch("type") === "ssdId" && (
-            <FormSelect
-              form={form}
-              label="SSD"
-              name="ssdId"
-              placeholder="Select ssd"
-              options={ssds}
-            />
-          )}
+          <FormSelect
+            form={form}
+            label="SSD"
+            name="ssdId"
+            placeholder="Select ssd"
+            options={ssds}
+          />
 
           <FormSelect
             form={form}
