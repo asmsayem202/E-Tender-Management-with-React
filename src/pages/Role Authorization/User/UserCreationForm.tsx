@@ -138,15 +138,16 @@ const UserCreationForm = ({ operation }: any) => {
   });
 
   const onSubmit = (data: any) => {
+    const { ssdOrBsd, ...rest } = data;
     if (operation === "update") {
-      updateMutation.mutate({ id: selectedId, data });
+      updateMutation.mutate({ id: selectedId, data: rest });
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate(rest);
     }
   };
 
-  console.log(form.watch());
-  // console.log("error ====>", form.formState.errors);
+  // console.log(form.watch());
+  console.log("error ====>", form.formState.errors);
 
   const handleTypeChange = (data: string) => {
     if (data === "ssd") {
@@ -185,6 +186,7 @@ const UserCreationForm = ({ operation }: any) => {
             name="phoneNumber"
             type="number"
           />
+
           {operation === "create" && (
             <FormPassword
               form={form}
@@ -201,6 +203,7 @@ const UserCreationForm = ({ operation }: any) => {
             placeholder="Select department"
             options={departments}
           /> */}
+
           <FormSelect
             form={form}
             label="Department"

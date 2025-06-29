@@ -10,5 +10,5 @@ export const userSchema = z.object({
   ssdOrBsd: z.string().optional(),
   bsdId: z.string().optional(),
   ssdId: z.string().optional(),
-  roleIds: z.array(z.string()).optional(),
+  roleIds: z.array(z.number()).optional(),
 });
