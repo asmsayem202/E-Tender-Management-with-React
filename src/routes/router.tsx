@@ -15,6 +15,7 @@ import UserListPage from "@/pages/Role Authorization/User/UserListPage";
 import PermissionListPage from "@/pages/Role Authorization/Permission/PermissionListPage";
 import ParentCategoryListPage from "@/pages/Perishable-Item/Parent-category/ParentCategoryListPage";
 import CategoryListPage from "@/pages/Perishable-Item/Category/CategoryListPage";
+import UnitListPage from "@/pages/Perishable-Item/Unit/UnitListPage";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: "perishable-product/category-list",
         element: <CategoryListPage />,
+      },
+      {
+        path: "perishable-product/unit-list",
+        element: <UnitListPage />,
       },
       {
         path: "setting/cantonment-list",

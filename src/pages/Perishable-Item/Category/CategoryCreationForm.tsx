@@ -28,7 +28,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const CategoryForm = ({ operation }: any) => {
+const CategoryCreationForm = ({ operation }: any) => {
   const query = useQueryClient();
   const selectedId = useGlobalStore((state) => state.selectedId);
   const closeDrawer = useGlobalStore((state) => state.closeDrawer);
@@ -160,4 +160,4 @@ const CategoryForm = ({ operation }: any) => {
   );
 };
 
-export default CategoryForm;
+export default CategoryCreationForm;

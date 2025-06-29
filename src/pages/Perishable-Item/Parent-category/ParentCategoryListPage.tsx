@@ -13,7 +13,7 @@ import {
   getAllParentCategory,
 } from "@/api/parent-category.api";
 import type { PARENT_CATEGORY } from "@/types/parent-category.type";
-import ParentCategoryForm from "./ParentCategoryForm";
+import ParentCategoryCreationForm from "./ParentCategoryCreationForm";
 
 const ParentCategoryListPage = () => {
   const setSelectedId = useGlobalStore((state) => state.setSelectedId);
@@ -100,10 +100,10 @@ const ParentCategoryListPage = () => {
       />
 
       <GlobalDrawer name="create-parent-category">
-        <ParentCategoryForm operation="create" />
+        <ParentCategoryCreationForm operation="create" />
       </GlobalDrawer>
       <GlobalDrawer name="update-parent-category">
-        <ParentCategoryForm operation="update" />
+        <ParentCategoryCreationForm operation="update" />
       </GlobalDrawer>
 
       <GlobalAlertModal mutation={deleteMutation} />
