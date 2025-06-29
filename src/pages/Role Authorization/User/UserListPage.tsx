@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useGlobalStore } from "@/store/store";
 import GlobalDrawer from "@/components/Custom/GlobalDrawer";
-import { EditIcon, EllipsisIcon, TrashIcon } from "lucide-react";
+import { EditIcon, EllipsisIcon, ShieldCheck, TrashIcon } from "lucide-react";
 import { DataTable } from "@/components/Custom/DataTable";
 import TableAction from "@/components/Custom/TableAction";
 import { useMutation } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import GlobalAlertModal from "@/components/Custom/GlobalAlertModal";
 import { deleteUser, getAllUser } from "@/api/user.api";
 import type { USER } from "@/types/user.type";
 import UserCreationForm from "./UserCreationForm";
+import RoleAssign from "./RoleAssign";
 
 const UserListPage = () => {
   const setSelectedId = useGlobalStore((state) => state.setSelectedId);
@@ -49,6 +50,20 @@ const UserListPage = () => {
         >
           <EditIcon size={20} />
           <span>Edit</span>
+        </button>
+      ),
+    },
+    {
+      label: (
+        <button
+          onClick={() => {
+            setSelectedId(data?.id as number);
+            openDrawer("role-assign");
+          }}
+          className="flex items-center gap-3 w-full cursor-pointer"
+        >
+          <ShieldCheck size={25} />
+          <span>Role Assign</span>
         </button>
       ),
     },
@@ -107,6 +122,9 @@ const UserListPage = () => {
       </GlobalDrawer>
       <GlobalDrawer name="update-user">
         <UserCreationForm operation="update" />
+      </GlobalDrawer>
+      <GlobalDrawer name="role-assign">
+        <RoleAssign />
       </GlobalDrawer>
 
       <GlobalAlertModal mutation={deleteMutation} />

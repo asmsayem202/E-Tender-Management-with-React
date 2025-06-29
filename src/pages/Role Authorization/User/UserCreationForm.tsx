@@ -6,6 +6,8 @@ import { createUser, getUser, updateUser } from "@/api/user.api";
 import FormInput from "@/components/Custom/FormInput";
 import FormPassword from "@/components/Custom/FormPassword";
 import FormSelect from "@/components/Custom/FormSelect";
+import Loading from "@/components/Custom/Loading";
+import MultiSelectDropdown from "@/components/Custom/MultiSelectDropdown";
 import { Button } from "@/components/ui/button";
 import {
   DrawerClose,
@@ -26,7 +28,6 @@ import type { SSD } from "@/types/ssd.type";
 import type { USER } from "@/types/user.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -47,12 +48,19 @@ const UserCreationForm = ({ operation }: any) => {
       bsdId: "",
       ssdId: "",
       roleIds: [],
+      ssdOrBsd: "",
     },
   });
 
-  const { data, isLoading } = useFetchData(["user", selectedId], () =>
-    getUser(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["user", selectedId],
+    () => getUser(selectedId),
+    {
+      queryKey: ["user", selectedId],
+      enabled: selectedId !== null,
+    }
   );
+
   const user: USER | null = data?.data ?? null;
 
   const { data: departmentData } = useFetchData(["department"], () =>
@@ -71,22 +79,23 @@ const UserCreationForm = ({ operation }: any) => {
 
   useEffect(() => {
     if (operation === "update") {
-      const resetData: USER = {
+      const resetData: any = {
         fullName: user?.fullName ?? "",
         userName: user?.userName ?? "",
         email: user?.email ?? "",
         phoneNumber: user?.phoneNumber ?? "",
         departmentId: user?.departmentId?.toString() ?? "",
-        password: user?.password ?? "",
-        bsdId: user?.bsdId?.toString() ?? "",
-        ssdId: user?.ssdId?.toString() ?? "",
-        roleIds: Array.isArray(user?.roles)
-          ? user.roles.map((role: { roleId: string }) => role.roleId)
-          : user?.roles ?? [],
       };
       form.reset(resetData);
+      if (user?.bsdId) {
+        form.setValue("ssdOrBsd", "bsd");
+        form.setValue("bsdId", user?.bsdId?.toString() ?? "");
+      } else if (user?.ssdId) {
+        form.setValue("ssdOrBsd", "bsd");
+        form.setValue("ssdId", user?.ssdId?.toString() ?? "");
+      }
     }
-  }, [operation, selectedId, user, form]);
+  }, [operation, user]);
 
   const createMutation = useMutation({
     mutationFn: createUser,
@@ -136,14 +145,19 @@ const UserCreationForm = ({ operation }: any) => {
     }
   };
 
+  console.log(form.watch());
+  // console.log("error ====>", form.formState.errors);
+
+  const handleTypeChange = (data: string) => {
+    if (data === "ssd") {
+      form.setValue("bsdId", "");
+    } else if (data === "bsd") {
+      form.setValue("ssdId", "");
+    }
+  };
+
   if (operation === "update") {
-    if (isLoading)
-      return (
-        <div className="w-full h-full flex justify-center items-center">
-          <Loader2 className="animate-spin" />
-          Loading...
-        </div>
-      );
+    if (isLoading) return <Loading />;
   }
 
   return (
@@ -157,15 +171,20 @@ const UserCreationForm = ({ operation }: any) => {
           {operation === "update" ? "update" : "create"} User.
         </DrawerDescription>
       </DrawerHeader>
-      <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
+      <div className="flex flex-col gap-4 overflow-y-auto h-full px-4 text-sm">
         <Separator />
         {/*  body start */}
 
         <Form {...form}>
           <FormInput form={form} label="Full Name" name="fullName" />
           <FormInput form={form} label="User Name" name="userName" />
-          <FormInput form={form} label="Email" name="email" />
-          <FormInput form={form} label="Phone Number" name="phoneNumber" />
+          <FormInput form={form} label="Email" name="email" type="email" />
+          <FormInput
+            form={form}
+            label="Phone Number"
+            name="phoneNumber"
+            type="number"
+          />
           {operation === "create" && (
             <FormPassword
               form={form}
@@ -175,6 +194,13 @@ const UserCreationForm = ({ operation }: any) => {
             />
           )}
 
+          {/* <FormSearchSelect
+            form={form}
+            label="Search Department"
+            name="departmentId"
+            placeholder="Select department"
+            options={departments}
+          /> */}
           <FormSelect
             form={form}
             label="Department"
@@ -184,27 +210,44 @@ const UserCreationForm = ({ operation }: any) => {
           />
           <FormSelect
             form={form}
-            label="BSD"
-            name="bsdId"
-            placeholder="Select bsd"
-            options={bsd}
+            label="SSD/BSD"
+            name="ssdOrBsd"
+            placeholder="Select ssd or bsd"
+            options={[
+              { id: "ssd", name: "SSD" },
+              { id: "bsd", name: "BSD" },
+            ]}
+            handleChange={handleTypeChange}
           />
+          {form.getValues("ssdOrBsd") === "bsd" && (
+            <FormSelect
+              form={form}
+              label="BSD"
+              name="bsdId"
+              placeholder="Select bsd"
+              options={bsd}
+            />
+          )}
 
-          <FormSelect
-            form={form}
-            label="SSD"
-            name="ssdId"
-            placeholder="Select ssd"
-            options={ssds}
-          />
+          {form.getValues("ssdOrBsd") === "ssd" && (
+            <FormSelect
+              form={form}
+              label="SSD"
+              name="ssdId"
+              placeholder="Select ssd"
+              options={ssds}
+            />
+          )}
 
-          <FormSelect
-            form={form}
-            label="Role"
-            name="roleId"
-            placeholder="Select role"
-            options={roles}
-          />
+          {operation === "create" && (
+            <MultiSelectDropdown
+              label="Role"
+              options={roles}
+              placeholder="-- Select Role --"
+              error={form?.formState.errors.roleIds?.message}
+              onValuesChange={(array: any) => form?.setValue("roleIds", array)}
+            />
+          )}
         </Form>
 
         {/* body end */}

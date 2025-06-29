@@ -7,7 +7,8 @@ export const userSchema = z.object({
   phoneNumber: z.string().min(10).max(15),
   departmentId: z.string(),
   password: z.string().optional(),
+  ssdOrBsd: z.string().optional(),
   bsdId: z.string().optional(),
   ssdId: z.string().optional(),
-  roleIds: z.array(z.string()),
+  roleIds: z.array(z.string()).optional(),
 });

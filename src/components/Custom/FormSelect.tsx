@@ -22,6 +22,7 @@ interface InputProps {
   value?: string;
   keyName?: string;
   options: any[];
+  handleChange?: any;
 }
 const FormSelect = ({
   label,
@@ -31,6 +32,7 @@ const FormSelect = ({
   options,
   value = "id",
   keyName = "name",
+  handleChange,
 }: InputProps) => {
   return (
     <FormField
@@ -39,7 +41,13 @@ const FormSelect = ({
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
-          <Select value={field.value} onValueChange={field.onChange}>
+          <Select
+            value={field.value}
+            onValueChange={(data) => {
+              field.onChange(data);
+              handleChange && handleChange(data);
+            }}
+          >
             <FormControl>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder={placeholder} />

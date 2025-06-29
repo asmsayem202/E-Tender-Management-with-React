@@ -8,6 +8,9 @@ export const getUser = (id: number) => api_instance.get(`User/GetUser/${id}`);
 export const createUser = (data: USER) =>
   api_instance.post(`User/CreateUser`, data);
 
+export const assignRole = ({ data }: any) =>
+  api_instance.post(`UserRole/AssignMultipleRoles`, data);
+
 export const changePassword = (data: any) =>
   api_instance.post(`User/ChangePassword`, data);
 
