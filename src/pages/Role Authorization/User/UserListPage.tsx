@@ -22,7 +22,9 @@ const UserListPage = () => {
     getAllUser()
   );
 
-  const user: USER[] = data?.data ?? [];
+  const user: USER[] = (data?.data ?? []).filter(
+    (u: USER) => u.isActive === true
+  );
 
   const deleteMutation = useMutation({
     mutationFn: deleteUser,

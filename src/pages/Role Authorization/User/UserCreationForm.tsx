@@ -138,6 +138,7 @@ const UserCreationForm = ({ operation }: any) => {
   });
 
   const onSubmit = (data: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ssdOrBsd, ...rest } = data;
     if (operation === "update") {
       updateMutation.mutate({ id: selectedId, data: rest });
@@ -151,9 +152,9 @@ const UserCreationForm = ({ operation }: any) => {
 
   const handleTypeChange = (data: string) => {
     if (data === "ssd") {
-      form.setValue("bsdId", "");
+      form.setValue("bsdId", null);
     } else if (data === "bsd") {
-      form.setValue("ssdId", "");
+      form.setValue("ssdId", null);
     }
   };
 

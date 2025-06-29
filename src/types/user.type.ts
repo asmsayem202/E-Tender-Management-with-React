@@ -9,5 +9,6 @@ export interface USER extends MUTATE_USER {
   bsdName?: string;
   ssdName?: string;
   roleNames?: string[];
+  isActive?: boolean;
   roles?: { roleId: string; roleName: string }[];
 }

@@ -8,8 +8,8 @@ export const userSchema = z.object({
   departmentId: z.string(),
   password: z.string().optional(),
   ssdOrBsd: z.string().optional(),
-  bsdId: z.string().optional(),
-  ssdId: z.string().optional(),
+  bsdId: z.string().optional().nullable(),
+  ssdId: z.string().optional().nullable(),
   roleIds: z.array(z.number()).optional(),
 });
 
