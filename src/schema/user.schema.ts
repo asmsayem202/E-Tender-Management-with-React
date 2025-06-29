@@ -12,3 +12,7 @@ export const userSchema = z.object({
   ssdId: z.string().optional(),
   roleIds: z.array(z.number()).optional(),
 });
+
+export const assignRoleSchema = z.object({
+  roleIds: z.array(z.number()),
+});

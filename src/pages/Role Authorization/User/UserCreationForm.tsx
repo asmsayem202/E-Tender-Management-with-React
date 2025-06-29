@@ -147,7 +147,7 @@ const UserCreationForm = ({ operation }: any) => {
   };
 
   // console.log(form.watch());
-  console.log("error ====>", form.formState.errors);
+  // console.log("error ====>", form.formState.errors);
 
   const handleTypeChange = (data: string) => {
     if (data === "ssd") {
@@ -222,7 +222,7 @@ const UserCreationForm = ({ operation }: any) => {
             ]}
             handleChange={handleTypeChange}
           />
-          {form.getValues("ssdOrBsd") === "bsd" && (
+          {form.watch("ssdOrBsd") === "bsd" && (
             <FormSelect
               form={form}
               label="BSD"
@@ -232,7 +232,7 @@ const UserCreationForm = ({ operation }: any) => {
             />
           )}
 
-          {form.getValues("ssdOrBsd") === "ssd" && (
+          {form.watch("ssdOrBsd") === "ssd" && (
             <FormSelect
               form={form}
               label="SSD"

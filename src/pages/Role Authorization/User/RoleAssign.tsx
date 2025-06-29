@@ -13,7 +13,7 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
-import { roleSchema } from "@/schema/role.schema";
+import { assignRoleSchema } from "@/schema/user.schema";
 import { useGlobalStore } from "@/store/store";
 import type { ROLE } from "@/types/role.type";
 import type { USER } from "@/types/user.type";
@@ -28,7 +28,7 @@ const RoleAssign = () => {
   const selectedId = useGlobalStore((state) => state.selectedId);
   const closeDrawer = useGlobalStore((state) => state.closeDrawer);
   const form = useForm({
-    resolver: zodResolver(roleSchema),
+    resolver: zodResolver(assignRoleSchema),
     defaultValues: {
       roleIds: [],
     },
@@ -79,7 +79,7 @@ const RoleAssign = () => {
     };
     assignMutation?.mutate({ data: payload });
   };
-  console.log("watch ====>", form.watch());
+  // console.log("watch ====>", form.watch());
   //   console.log("error ====>", form.formState.errors);
 
   if (isLoading) return <Loading />;
