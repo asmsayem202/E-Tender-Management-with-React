@@ -7,27 +7,26 @@ import TableAction from "@/components/Custom/TableAction";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useFetchData from "@/hooks/useFetchData";
-import { deleteCantonment, getAllCantonment } from "@/api/cantonment.api";
-import type { CANTONMENT } from "@/types/cantonment.type";
-import CantonmentCreationForm from "./CantonmentCreationForm";
 import GlobalAlertModal from "@/components/Custom/GlobalAlertModal";
+import { deleteWarning, getAllWarning } from "@/api/warning.api";
+import type { WARNING } from "@/types/warning.type";
+import WarningCreationForm from "./WarningCreationForm";
 
-const CantonmentListPage = () => {
+const WarningListPage = () => {
   const setSelectedId = useGlobalStore((state) => state.setSelectedId);
-  // const setSelectedData = useGlobalStore((state) => state.setSelectedData);
   const openDrawer = useGlobalStore((state) => state.openDrawer);
   const openAlertModal = useGlobalStore((state) => state.openAlertModal);
   const closeAlertModal = useGlobalStore((state) => state.closeAlertModal);
-  const { data, isLoading, refetch } = useFetchData(["cantonment"], () =>
-    getAllCantonment()
+  const { data, isLoading, refetch } = useFetchData(["warning"], () =>
+    getAllWarning()
   );
 
-  const cantonment: CANTONMENT[] = data?.data ?? [];
+  const warnings: WARNING[] = data?.data ?? [];
 
   const deleteMutation = useMutation({
-    mutationFn: deleteCantonment,
+    mutationFn: deleteWarning,
     onSuccess: () => {
-      toast.success("Cantonment Delete Successful");
+      toast.success("Warning Delete Successful");
       refetch();
       closeAlertModal();
     },
@@ -38,14 +37,13 @@ const CantonmentListPage = () => {
     },
   });
 
-  const actionItems = (data: CANTONMENT) => [
+  const actionItems = (data: WARNING) => [
     {
       label: (
         <button
           onClick={() => {
-            // setSelectedData(data);
             setSelectedId(data?.id as number);
-            openDrawer("update-cantonment");
+            openDrawer("update-warning");
           }}
           className="flex items-center gap-3 w-full cursor-pointer"
         >
@@ -73,15 +71,14 @@ const CantonmentListPage = () => {
   return (
     <div>
       <div className="mb-3 flex justify-between gap-2">
-        <Button onClick={() => openDrawer("create-cantonment")}>
-          Create Cantonment
+        <Button onClick={() => openDrawer("create-warning")}>
+          Create Warning
         </Button>
-        {/* {searchComponent} */}
       </div>
 
       <DataTable
         isLoading={isLoading}
-        data={cantonment}
+        data={warnings}
         columns={[
           {
             accessorKey: "name",
@@ -98,14 +95,12 @@ const CantonmentListPage = () => {
           },
         ]}
       />
-      {/* {paginationComponent} */}
-      {/* <Pagination /> */}
 
-      <GlobalDrawer name="create-cantonment">
-        <CantonmentCreationForm operation="create" />
+      <GlobalDrawer name="create-warning">
+        <WarningCreationForm operation="create" />
       </GlobalDrawer>
-      <GlobalDrawer name="update-cantonment">
-        <CantonmentCreationForm operation="update" />
+      <GlobalDrawer name="update-warning">
+        <WarningCreationForm operation="update" />
       </GlobalDrawer>
 
       <GlobalAlertModal mutation={deleteMutation} />
@@ -113,4 +108,4 @@ const CantonmentListPage = () => {
   );
 };
 
-export default CantonmentListPage;
+export default WarningListPage;

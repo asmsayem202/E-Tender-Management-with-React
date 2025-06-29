@@ -17,6 +17,7 @@ import ParentCategoryListPage from "@/pages/Perishable-Item/Parent-category/Pare
 import CategoryListPage from "@/pages/Perishable-Item/Category/CategoryListPage";
 import UnitListPage from "@/pages/Perishable-Item/Unit/UnitListPage";
 import ItemListPage from "@/pages/Perishable-Item/Item/ItemListPage";
+import WarningListPage from "@/pages/Supplier Management/Warning/WarningListPage";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
       {
         path: "ssd-bsd/bsd-list",
         element: <BsdListPage />,
+      },
+      {
+        path: "supplier-management/warning-list",
+        element: <WarningListPage />,
       },
       {
         path: "perishable-product/parent-category-list",
