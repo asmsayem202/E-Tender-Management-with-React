@@ -15,6 +15,9 @@ import UserListPage from "@/pages/Role Authorization/User/UserListPage";
 import PermissionListPage from "@/pages/Role Authorization/Permission/PermissionListPage";
 import ParentCategoryListPage from "@/pages/Perishable-Item/Parent-category/ParentCategoryListPage";
 import CategoryListPage from "@/pages/Perishable-Item/Category/CategoryListPage";
+import UnitListPage from "@/pages/Perishable-Item/Unit/UnitListPage";
+import ItemListPage from "@/pages/Perishable-Item/Item/ItemListPage";
+import WarningListPage from "@/pages/Supplier Management/Warning/WarningListPage";
 
 export const router = createBrowserRouter([
   {
@@ -50,12 +53,24 @@ export const router = createBrowserRouter([
         element: <BsdListPage />,
       },
       {
+        path: "supplier-management/warning-list",
+        element: <WarningListPage />,
+      },
+      {
         path: "perishable-product/parent-category-list",
         element: <ParentCategoryListPage />,
       },
       {
         path: "perishable-product/category-list",
         element: <CategoryListPage />,
+      },
+      {
+        path: "perishable-product/unit-list",
+        element: <UnitListPage />,
+      },
+      {
+        path: "perishable-product/item-list",
+        element: <ItemListPage />,
       },
       {
         path: "setting/cantonment-list",

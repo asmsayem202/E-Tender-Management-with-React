@@ -8,9 +8,9 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useFetchData from "@/hooks/useFetchData";
 import GlobalAlertModal from "@/components/Custom/GlobalAlertModal";
-import CategoryForm from "./CategoryForm";
 import { deleteCategory, getAllCategory } from "@/api/category.api";
 import type { CATEGORY } from "@/types/category.type";
+import CategoryCreationForm from "./CategoryCreationForm";
 
 const CategoryListPage = () => {
   const setSelectedId = useGlobalStore((state) => state.setSelectedId);
@@ -101,10 +101,10 @@ const CategoryListPage = () => {
       />
 
       <GlobalDrawer name="create-category">
-        <CategoryForm operation="create" />
+        <CategoryCreationForm operation="create" />
       </GlobalDrawer>
       <GlobalDrawer name="update-category">
-        <CategoryForm operation="update" />
+        <CategoryCreationForm operation="update" />
       </GlobalDrawer>
 
       <GlobalAlertModal mutation={deleteMutation} />

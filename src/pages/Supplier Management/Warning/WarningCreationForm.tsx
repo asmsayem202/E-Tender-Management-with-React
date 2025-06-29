@@ -1,11 +1,5 @@
-import {
-  createCategory,
-  getCategory,
-  updateCategory,
-} from "@/api/category.api";
-import { getAllParentCategory } from "@/api/parent-category.api";
+import { createWarning, getWarning, updateWarning } from "@/api/warning.api";
 import FormInput from "@/components/Custom/FormInput";
-import FormSelect from "@/components/Custom/FormSelect";
 import { Button } from "@/components/ui/button";
 import {
   DrawerClose,
@@ -17,10 +11,9 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
-import { categorySchema } from "@/schema/category.schema";
+import { warningSchema } from "@/schema/warning.schema";
 import { useGlobalStore } from "@/store/store";
-import type { CATEGORY } from "@/types/category.type";
-import type { PARENT_CATEGORY } from "@/types/parent-category.type";
+import type { WARNING } from "@/types/warning.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -28,42 +21,36 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const CategoryForm = ({ operation }: any) => {
+const WarningCreationForm = ({ operation }: any) => {
   const query = useQueryClient();
   const selectedId = useGlobalStore((state) => state.selectedId);
   const closeDrawer = useGlobalStore((state) => state.closeDrawer);
   const form = useForm({
-    resolver: zodResolver(categorySchema),
+    resolver: zodResolver(warningSchema),
     defaultValues: {
       name: "",
-      parentCategoryId: "",
     },
   });
 
-  const { data, isLoading } = useFetchData(["category", selectedId], () =>
-    getCategory(selectedId)
+  const { data, isLoading } = useFetchData(["warning", selectedId], () =>
+    getWarning(selectedId)
   );
-  const category: CATEGORY | null = data?.data ?? null;
-
-  const { data: allParentCategories } = useFetchData(["parent-category"], () =>
-    getAllParentCategory()
-  );
-  const parentCategories: PARENT_CATEGORY[] = allParentCategories?.data ?? [];
+  const warning: WARNING | null = data?.data ?? null;
 
   useEffect(() => {
     if (operation === "update") {
       form.reset({
-        name: category?.name || "",
-        parentCategoryId: category?.parentCategoryId?.toString() || "",
+        name: warning?.name || "",
       });
+      form.setValue("name", warning?.name || "");
     }
-  }, [operation, selectedId, category, form]);
+  }, [operation, selectedId, warning, form]);
 
   const createMutation = useMutation({
-    mutationFn: createCategory,
+    mutationFn: createWarning,
     onSuccess: () => {
-      toast.success("Category Create Successful");
-      query.invalidateQueries({ queryKey: ["category"] });
+      toast.success("Warning Create Successful");
+      query.invalidateQueries({ queryKey: ["warning"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -80,10 +67,10 @@ const CategoryForm = ({ operation }: any) => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateCategory,
+    mutationFn: updateWarning,
     onSuccess: () => {
-      toast.success("Category Update Successful");
-      query.invalidateQueries({ queryKey: ["category"] });
+      toast.success("Warning Update Successful");
+      query.invalidateQueries({ queryKey: ["warning"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -121,11 +108,11 @@ const CategoryForm = ({ operation }: any) => {
     <React.Fragment>
       <DrawerHeader className="gap-1">
         <DrawerTitle>
-          {operation === "update" ? "Update Category" : "Create Category"}
+          {operation === "update" ? "Update Warning" : "Create Warning"}
         </DrawerTitle>
         <DrawerDescription>
           Fill up the details below to{" "}
-          {operation === "update" ? "update" : "create"} Category.
+          {operation === "update" ? "update" : "create"} Warning.
         </DrawerDescription>
       </DrawerHeader>
       <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
@@ -134,13 +121,6 @@ const CategoryForm = ({ operation }: any) => {
 
         <Form {...form}>
           <FormInput form={form} label="Name" name="name" />
-          <FormSelect
-            form={form}
-            label="Parent Category"
-            name="parentCategoryId"
-            placeholder="Select a parent category"
-            options={parentCategories}
-          />
         </Form>
 
         {/* body end */}
@@ -160,4 +140,4 @@ const CategoryForm = ({ operation }: any) => {
   );
 };
 
-export default CategoryForm;
+export default WarningCreationForm;

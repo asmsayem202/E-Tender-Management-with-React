@@ -1,7 +1,9 @@
-import { createBsd, updateBsd } from "@/api/bsd.api";
-import { getAllCantonment } from "@/api/cantonment.api";
+import {
+  createParentCategory,
+  getParentCategory,
+  updateParentCategory,
+} from "@/api/parent-category.api";
 import FormInput from "@/components/Custom/FormInput";
-import FormSelect from "@/components/Custom/FormSelect";
 import { Button } from "@/components/ui/button";
 import {
   DrawerClose,
@@ -13,42 +15,46 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
-import { ssdSchema } from "@/schema/ssd.schema";
+import { parentCategorySchema } from "@/schema/parent-category.schema";
 import { useGlobalStore } from "@/store/store";
+import type { PARENT_CATEGORY } from "@/types/parent-category.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const BsdCreationForm = ({ operation }: any) => {
+const ParentCategoryCreationForm = ({ operation }: any) => {
   const query = useQueryClient();
-  const selectedData = useGlobalStore((state) => state.selectedData);
+  const selectedId = useGlobalStore((state) => state.selectedId);
   const closeDrawer = useGlobalStore((state) => state.closeDrawer);
   const form = useForm({
-    resolver: zodResolver(ssdSchema),
+    resolver: zodResolver(parentCategorySchema),
     defaultValues: {
       name: "",
-      district: "",
-      upozilla: "",
-      cantonmentId: "",
     },
   });
 
+  const { data, isLoading } = useFetchData(
+    ["parent-category", selectedId],
+    () => getParentCategory(selectedId)
+  );
+  const parentCategory: PARENT_CATEGORY | null = data?.data ?? null;
+
   useEffect(() => {
     if (operation === "update") {
-      form.setValue("name", selectedData.name);
-      form.setValue("district", selectedData.district);
-      form.setValue("upozilla", selectedData.upozilla);
-      form.setValue("cantonmentId", selectedData.cantonmentId?.toString());
+      form.reset({
+        name: parentCategory?.name || "",
+      });
     }
-  }, [operation]);
+  }, [operation, selectedId, parentCategory, form]);
 
   const createMutation = useMutation({
-    mutationFn: createBsd,
+    mutationFn: createParentCategory,
     onSuccess: () => {
-      toast.success("BSD Create Successful");
-      query.invalidateQueries({ queryKey: ["bsd"] });
+      toast.success("Parent Category Create Successful");
+      query.invalidateQueries({ queryKey: ["parent-category"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -65,10 +71,10 @@ const BsdCreationForm = ({ operation }: any) => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateBsd,
+    mutationFn: updateParentCategory,
     onSuccess: () => {
-      toast.success("BSD Update Successful");
-      query.invalidateQueries({ queryKey: ["bsd"] });
+      toast.success("Parent Category Update Successful");
+      query.invalidateQueries({ queryKey: ["parent-category"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -85,26 +91,34 @@ const BsdCreationForm = ({ operation }: any) => {
   });
 
   const onSubmit = (data: any) => {
-    // console.log(data);
     if (operation === "update") {
-      updateMutation.mutate({ id: selectedData.id, data });
+      updateMutation.mutate({ id: selectedId, data });
     } else {
       createMutation.mutate(data);
     }
   };
 
-  const { data } = useFetchData(["cantonment"], () => getAllCantonment());
-  const cantonments = data?.data ?? [];
+  if (operation === "update") {
+    if (isLoading)
+      return (
+        <div className="w-full h-full flex justify-center items-center">
+          <Loader2 className="animate-spin" />
+          Loading...
+        </div>
+      );
+  }
 
   return (
     <React.Fragment>
       <DrawerHeader className="gap-1">
         <DrawerTitle>
-          {operation === "update" ? "Update BSD" : "Create BSD"}
+          {operation === "update"
+            ? "Update Parent Category"
+            : "Create Parent Category"}
         </DrawerTitle>
         <DrawerDescription>
           Fill up the details below to{" "}
-          {operation === "update" ? "update" : "create"} BSD.
+          {operation === "update" ? "update" : "create"} Parent Category.
         </DrawerDescription>
       </DrawerHeader>
       <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
@@ -113,20 +127,6 @@ const BsdCreationForm = ({ operation }: any) => {
 
         <Form {...form}>
           <FormInput form={form} label="Name" name="name" />
-          <FormInput
-            form={form}
-            label="District"
-            name="district"
-            placeholder="Enter district name"
-          />
-          <FormInput form={form} label="Upozilla" name="upozilla" />
-          <FormSelect
-            form={form}
-            label="Cantonment"
-            name="cantonmentId"
-            placeholder="Select cantonment"
-            options={cantonments}
-          />
         </Form>
 
         {/* body end */}
@@ -146,4 +146,4 @@ const BsdCreationForm = ({ operation }: any) => {
   );
 };
 
-export default BsdCreationForm;
+export default ParentCategoryCreationForm;

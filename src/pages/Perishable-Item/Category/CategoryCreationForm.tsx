@@ -1,5 +1,9 @@
-import { createBsd, updateBsd } from "@/api/bsd.api";
-import { getAllCantonment } from "@/api/cantonment.api";
+import {
+  createCategory,
+  getCategory,
+  updateCategory,
+} from "@/api/category.api";
+import { getAllParentCategory } from "@/api/parent-category.api";
 import FormInput from "@/components/Custom/FormInput";
 import FormSelect from "@/components/Custom/FormSelect";
 import { Button } from "@/components/ui/button";
@@ -13,42 +17,53 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
-import { ssdSchema } from "@/schema/ssd.schema";
+import { categorySchema } from "@/schema/category.schema";
 import { useGlobalStore } from "@/store/store";
+import type { CATEGORY } from "@/types/category.type";
+import type { PARENT_CATEGORY } from "@/types/parent-category.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const BsdCreationForm = ({ operation }: any) => {
+const CategoryCreationForm = ({ operation }: any) => {
   const query = useQueryClient();
-  const selectedData = useGlobalStore((state) => state.selectedData);
+  const selectedId = useGlobalStore((state) => state.selectedId);
   const closeDrawer = useGlobalStore((state) => state.closeDrawer);
   const form = useForm({
-    resolver: zodResolver(ssdSchema),
+    resolver: zodResolver(categorySchema),
     defaultValues: {
       name: "",
-      district: "",
-      upozilla: "",
-      cantonmentId: "",
+      parentCategoryId: "",
     },
   });
 
+  const { data, isLoading } = useFetchData(["category", selectedId], () =>
+    getCategory(selectedId)
+  );
+  const category: CATEGORY | null = data?.data ?? null;
+
+  const { data: allParentCategories } = useFetchData(["parent-category"], () =>
+    getAllParentCategory()
+  );
+  const parentCategories: PARENT_CATEGORY[] = allParentCategories?.data ?? [];
+
   useEffect(() => {
     if (operation === "update") {
-      form.setValue("name", selectedData.name);
-      form.setValue("district", selectedData.district);
-      form.setValue("upozilla", selectedData.upozilla);
-      form.setValue("cantonmentId", selectedData.cantonmentId?.toString());
+      form.reset({
+        name: category?.name || "",
+        parentCategoryId: category?.parentCategoryId?.toString() || "",
+      });
     }
-  }, [operation]);
+  }, [operation, selectedId, category, form]);
 
   const createMutation = useMutation({
-    mutationFn: createBsd,
+    mutationFn: createCategory,
     onSuccess: () => {
-      toast.success("BSD Create Successful");
-      query.invalidateQueries({ queryKey: ["bsd"] });
+      toast.success("Category Create Successful");
+      query.invalidateQueries({ queryKey: ["category"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -65,10 +80,10 @@ const BsdCreationForm = ({ operation }: any) => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateBsd,
+    mutationFn: updateCategory,
     onSuccess: () => {
-      toast.success("BSD Update Successful");
-      query.invalidateQueries({ queryKey: ["bsd"] });
+      toast.success("Category Update Successful");
+      query.invalidateQueries({ queryKey: ["category"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -85,26 +100,32 @@ const BsdCreationForm = ({ operation }: any) => {
   });
 
   const onSubmit = (data: any) => {
-    // console.log(data);
     if (operation === "update") {
-      updateMutation.mutate({ id: selectedData.id, data });
+      updateMutation.mutate({ id: selectedId, data });
     } else {
       createMutation.mutate(data);
     }
   };
 
-  const { data } = useFetchData(["cantonment"], () => getAllCantonment());
-  const cantonments = data?.data ?? [];
+  if (operation === "update") {
+    if (isLoading)
+      return (
+        <div className="w-full h-full flex justify-center items-center">
+          <Loader2 className="animate-spin" />
+          Loading...
+        </div>
+      );
+  }
 
   return (
     <React.Fragment>
       <DrawerHeader className="gap-1">
         <DrawerTitle>
-          {operation === "update" ? "Update BSD" : "Create BSD"}
+          {operation === "update" ? "Update Category" : "Create Category"}
         </DrawerTitle>
         <DrawerDescription>
           Fill up the details below to{" "}
-          {operation === "update" ? "update" : "create"} BSD.
+          {operation === "update" ? "update" : "create"} Category.
         </DrawerDescription>
       </DrawerHeader>
       <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
@@ -113,19 +134,12 @@ const BsdCreationForm = ({ operation }: any) => {
 
         <Form {...form}>
           <FormInput form={form} label="Name" name="name" />
-          <FormInput
-            form={form}
-            label="District"
-            name="district"
-            placeholder="Enter district name"
-          />
-          <FormInput form={form} label="Upozilla" name="upozilla" />
           <FormSelect
             form={form}
-            label="Cantonment"
-            name="cantonmentId"
-            placeholder="Select cantonment"
-            options={cantonments}
+            label="Parent Category"
+            name="parentCategoryId"
+            placeholder="Select a parent category"
+            options={parentCategories}
           />
         </Form>
 
@@ -146,4 +160,4 @@ const BsdCreationForm = ({ operation }: any) => {
   );
 };
 
-export default BsdCreationForm;
+export default CategoryCreationForm;

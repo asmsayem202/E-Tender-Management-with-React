@@ -2,7 +2,7 @@ import {
   createCantonment,
   getCantonment,
   updateCantonment,
-} from "@/api/management.api";
+} from "@/api/cantonment.api";
 import FormInput from "@/components/Custom/FormInput";
 import { Button } from "@/components/ui/button";
 import {

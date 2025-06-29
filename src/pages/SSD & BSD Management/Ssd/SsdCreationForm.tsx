@@ -1,4 +1,4 @@
-import { getAllCantonment } from "@/api/management.api";
+import { getAllCantonment } from "@/api/cantonment.api";
 import { createSsd, updateSsd } from "@/api/ssd.api";
 import FormInput from "@/components/Custom/FormInput";
 import FormSelect from "@/components/Custom/FormSelect";

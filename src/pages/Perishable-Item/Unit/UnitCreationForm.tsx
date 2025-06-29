@@ -1,9 +1,6 @@
-import {
-  createParentCategory,
-  getParentCategory,
-  updateParentCategory,
-} from "@/api/parent-category.api";
+import { createUnit, getUnit, updateUnit } from "@/api/unit.api";
 import FormInput from "@/components/Custom/FormInput";
+import FormTextArea from "@/components/Custom/FormTextArea";
 import { Button } from "@/components/ui/button";
 import {
   DrawerClose,
@@ -15,9 +12,9 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
-import { parentCategorySchema } from "@/schema/parent-category.schema";
+import { unitSchema } from "@/schema/unit.schema";
 import { useGlobalStore } from "@/store/store";
-import type { PARENT_CATEGORY } from "@/types/parent-category.type";
+import type { UNIT } from "@/types/unit.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -25,36 +22,37 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const ParentCategoryForm = ({ operation }: any) => {
+const UnitCreationForm = ({ operation }: any) => {
   const query = useQueryClient();
   const selectedId = useGlobalStore((state) => state.selectedId);
   const closeDrawer = useGlobalStore((state) => state.closeDrawer);
   const form = useForm({
-    resolver: zodResolver(parentCategorySchema),
+    resolver: zodResolver(unitSchema),
     defaultValues: {
       name: "",
+      description: "",
     },
   });
 
-  const { data, isLoading } = useFetchData(
-    ["parent-category", selectedId],
-    () => getParentCategory(selectedId)
+  const { data, isLoading } = useFetchData(["unit", selectedId], () =>
+    getUnit(selectedId)
   );
-  const parentCategory: PARENT_CATEGORY | null = data?.data ?? null;
+  const unit: UNIT | null = data?.data ?? null;
 
   useEffect(() => {
     if (operation === "update") {
       form.reset({
-        name: parentCategory?.name || "",
+        name: unit?.name || "",
+        description: unit?.description || "",
       });
     }
-  }, [operation, selectedId, parentCategory, form]);
+  }, [operation, selectedId, unit, form]);
 
   const createMutation = useMutation({
-    mutationFn: createParentCategory,
+    mutationFn: createUnit,
     onSuccess: () => {
-      toast.success("Parent Category Create Successful");
-      query.invalidateQueries({ queryKey: ["parent-category"] });
+      toast.success("Unit Create Successful");
+      query.invalidateQueries({ queryKey: ["unit"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -71,10 +69,10 @@ const ParentCategoryForm = ({ operation }: any) => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateParentCategory,
+    mutationFn: updateUnit,
     onSuccess: () => {
-      toast.success("Parent Category Update Successful");
-      query.invalidateQueries({ queryKey: ["parent-category"] });
+      toast.success("Unit Update Successful");
+      query.invalidateQueries({ queryKey: ["unit"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -112,13 +110,11 @@ const ParentCategoryForm = ({ operation }: any) => {
     <React.Fragment>
       <DrawerHeader className="gap-1">
         <DrawerTitle>
-          {operation === "update"
-            ? "Update Parent Category"
-            : "Create Parent Category"}
+          {operation === "update" ? "Update Unit" : "Create Unit"}
         </DrawerTitle>
         <DrawerDescription>
           Fill up the details below to{" "}
-          {operation === "update" ? "update" : "create"} Parent Category.
+          {operation === "update" ? "update" : "create"} Unit.
         </DrawerDescription>
       </DrawerHeader>
       <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
@@ -127,6 +123,7 @@ const ParentCategoryForm = ({ operation }: any) => {
 
         <Form {...form}>
           <FormInput form={form} label="Name" name="name" />
+          <FormTextArea form={form} label="Description" name="description" />
         </Form>
 
         {/* body end */}
@@ -146,4 +143,4 @@ const ParentCategoryForm = ({ operation }: any) => {
   );
 };
 
-export default ParentCategoryForm;
+export default UnitCreationForm;

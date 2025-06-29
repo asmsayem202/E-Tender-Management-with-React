@@ -8,28 +8,25 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useFetchData from "@/hooks/useFetchData";
 import GlobalAlertModal from "@/components/Custom/GlobalAlertModal";
-import {
-  deleteParentCategory,
-  getAllParentCategory,
-} from "@/api/parent-category.api";
-import type { PARENT_CATEGORY } from "@/types/parent-category.type";
-import ParentCategoryCreationForm from "./ParentCategoryCreationForm";
+import { deleteWarning, getAllWarning } from "@/api/warning.api";
+import type { WARNING } from "@/types/warning.type";
+import WarningCreationForm from "./WarningCreationForm";
 
-const ParentCategoryListPage = () => {
+const WarningListPage = () => {
   const setSelectedId = useGlobalStore((state) => state.setSelectedId);
   const openDrawer = useGlobalStore((state) => state.openDrawer);
   const openAlertModal = useGlobalStore((state) => state.openAlertModal);
   const closeAlertModal = useGlobalStore((state) => state.closeAlertModal);
-  const { data, isLoading, refetch } = useFetchData(["parent-category"], () =>
-    getAllParentCategory()
+  const { data, isLoading, refetch } = useFetchData(["warning"], () =>
+    getAllWarning()
   );
 
-  const parentCategory: PARENT_CATEGORY[] = data?.data ?? [];
+  const warnings: WARNING[] = data?.data ?? [];
 
   const deleteMutation = useMutation({
-    mutationFn: deleteParentCategory,
+    mutationFn: deleteWarning,
     onSuccess: () => {
-      toast.success("Parent Category Delete Successful");
+      toast.success("Warning Delete Successful");
       refetch();
       closeAlertModal();
     },
@@ -40,13 +37,13 @@ const ParentCategoryListPage = () => {
     },
   });
 
-  const actionItems = (data: PARENT_CATEGORY) => [
+  const actionItems = (data: WARNING) => [
     {
       label: (
         <button
           onClick={() => {
             setSelectedId(data?.id as number);
-            openDrawer("update-parent-category");
+            openDrawer("update-warning");
           }}
           className="flex items-center gap-3 w-full cursor-pointer"
         >
@@ -74,14 +71,14 @@ const ParentCategoryListPage = () => {
   return (
     <div>
       <div className="mb-3 flex justify-between gap-2">
-        <Button onClick={() => openDrawer("create-parent-category")}>
-          Create Parent Category
+        <Button onClick={() => openDrawer("create-warning")}>
+          Create Warning
         </Button>
       </div>
 
       <DataTable
         isLoading={isLoading}
-        data={parentCategory}
+        data={warnings}
         columns={[
           {
             accessorKey: "name",
@@ -99,11 +96,11 @@ const ParentCategoryListPage = () => {
         ]}
       />
 
-      <GlobalDrawer name="create-parent-category">
-        <ParentCategoryCreationForm operation="create" />
+      <GlobalDrawer name="create-warning">
+        <WarningCreationForm operation="create" />
       </GlobalDrawer>
-      <GlobalDrawer name="update-parent-category">
-        <ParentCategoryCreationForm operation="update" />
+      <GlobalDrawer name="update-warning">
+        <WarningCreationForm operation="update" />
       </GlobalDrawer>
 
       <GlobalAlertModal mutation={deleteMutation} />
@@ -111,4 +108,4 @@ const ParentCategoryListPage = () => {
   );
 };
 
-export default ParentCategoryListPage;
+export default WarningListPage;

@@ -7,7 +7,7 @@ import TableAction from "@/components/Custom/TableAction";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useFetchData from "@/hooks/useFetchData";
-import { deleteCantonment, getAllCantonment } from "@/api/management.api";
+import { deleteCantonment, getAllCantonment } from "@/api/cantonment.api";
 import type { CANTONMENT } from "@/types/cantonment.type";
 import CantonmentCreationForm from "./CantonmentCreationForm";
 import GlobalAlertModal from "@/components/Custom/GlobalAlertModal";

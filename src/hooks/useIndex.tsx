@@ -16,7 +16,6 @@ const useIndex = ({ indexFn, dependencies }: props) => {
   const [isSearching, setIsSearching] = useState(false);
 
   const url = indexFn?.toString().split("`")[1];
-  // console.log("url ========>", url);
 
   const { data, isLoading, refetch } = useFetchData(
     [...dependencies, perPage, page, search],
