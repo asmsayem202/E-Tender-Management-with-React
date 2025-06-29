@@ -55,7 +55,7 @@ const FormDatePicker = ({ label, name, form, placeholder }: InputProps) => {
               <Calendar
                 mode="single"
                 selected={field.value ? new Date(field.value) : undefined}
-                onSelect={(date) => {
+                onSelect={(date: any) => {
                   field.onChange(format(date as any, "yyyy-MM-dd"));
                   triggerRef.current?.click();
                 }}
