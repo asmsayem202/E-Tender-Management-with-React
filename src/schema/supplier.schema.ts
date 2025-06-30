@@ -1,0 +1,25 @@
+import { z } from "zod";
+
+export const supplierSchema = z.object({
+  name: z.string().min(3),
+  contactPerson: z.string().min(3),
+  mobileNo: z.string().min(3),
+  email: z.string().min(3),
+  ascLicenseNo: z.string().min(3),
+  ascLicenseEndorsementDate: z.string().min(3),
+  ascLicenseExpiryDate: z.string().min(3),
+  BankAccountName: z.string().min(3),
+  BankAccountNo: z.string().min(3),
+  BankBranchName: z.string().min(3),
+  TIN: z.string().min(3),
+  BIN: z.string().min(3),
+  TINPicturePath: z.string().min(3),
+  BINPicturePath: z.string().min(3),
+  AssetValue: z.number(),
+  ContractCapacity: z.number(),
+  OtherBusiness: z.string().optional(),
+  OtherBusinessLicensesCopyPath: z.string().min(3),
+  SecurityClearanceValidity: z.string().min(3),
+  SupplierPhotosPath: z.string().min(3),
+  SignaturePicturePath: z.string().min(3),
+});
