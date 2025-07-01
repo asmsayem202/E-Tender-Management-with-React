@@ -10,6 +10,7 @@ import useFetchData from "@/hooks/useFetchData";
 import GlobalAlertModal from "@/components/Custom/GlobalAlertModal";
 import { deleteSupplier, getAllSupplier } from "@/api/supplier.api";
 import type { SUPPLIER } from "@/types/supplier.type";
+import SupplierCreationForm from "./SupplierCreationForm";
 
 const SupplierListPage = () => {
   const setSelectedId = useGlobalStore((state) => state.setSelectedId);
@@ -81,11 +82,11 @@ const SupplierListPage = () => {
         columns={[
           {
             accessorKey: "name",
-            header: "Name",
+            header: "Company Name",
           },
           {
             accessorKey: "contactPerson",
-            header: "User Name",
+            header: "Person Name",
           },
           {
             accessorKey: "ascLicenseNo",
@@ -112,10 +113,10 @@ const SupplierListPage = () => {
       />
 
       <GlobalDrawer name="create-supplier">
-        {/* <WarningCreationForm operation="create" /> */}
+        <SupplierCreationForm operation="create" />
       </GlobalDrawer>
       <GlobalDrawer name="update-supplier">
-        {/* <WarningCreationForm operation="update" /> */}
+        <SupplierCreationForm operation="update" />
       </GlobalDrawer>
 
       <GlobalAlertModal mutation={deleteMutation} />

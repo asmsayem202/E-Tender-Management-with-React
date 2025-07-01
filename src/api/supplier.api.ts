@@ -8,7 +8,11 @@ export const getSupplier = (id: number) =>
   api_instance.get(`Supplier/GetSupplier/${id}`);
 
 export const createSupplier = (data: SUPPLIER) =>
-  api_instance.post(`Supplier/CreateSupplier`, data);
+  api_instance.post(`Supplier/CreateSupplier`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
 export const updateSupplier = ({
   id,
@@ -16,7 +20,12 @@ export const updateSupplier = ({
 }: {
   id: number | string;
   data: SUPPLIER;
-}) => api_instance.put(`Supplier/UpdateSupplier/${id}`, data);
+}) =>
+  api_instance.put(`Supplier/UpdateSupplier/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
 export const deleteSupplier = (id: number) =>
   api_instance.delete(`Supplier/DeleteSupplier/${id}`);
