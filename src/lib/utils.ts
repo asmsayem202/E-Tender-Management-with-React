@@ -1,9 +1,18 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { baseUrl } from "@/apiIntelesence";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const generateImgUrl = (link: any): string => {
+  if (link) {
+    return `${baseUrl?.replace("api/", "")}${link}`;
+  } else {
+    return "";
+  }
+};
 
 export const readImageFile = ({
   setterFunction,

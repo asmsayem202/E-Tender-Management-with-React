@@ -57,8 +57,6 @@ const FormFileUpload = ({
     if (!disabled) {
       setFile(value);
       const newVal = value?.length === 1 ? value[0] : value || null;
-      console.log("form image is : ", newVal);
-
       form.setValue(name, newVal);
     }
   };

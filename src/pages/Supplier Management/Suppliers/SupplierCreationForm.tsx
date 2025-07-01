@@ -46,15 +46,15 @@ const SupplierCreationForm = ({ operation }: any) => {
       bankBranchName: "",
       tin: "",
       bin: "",
-      tinPicturePath: "",
-      binPicturePath: "",
+      tinPicturePath: undefined,
+      binPicturePath: undefined,
       assetValue: "",
       contractCapacity: "",
       otherBusiness: false,
-      otherBusinessLicensesCopyPath: "",
       securityClearanceValidity: "",
-      supplierPhotosPath: "",
-      signaturePicturePath: "",
+      supplierPhotosPath: undefined,
+      signaturePicturePath: undefined,
+      otherBusinessLicensesCopyPath: undefined,
     },
   });
 
@@ -78,16 +78,16 @@ const SupplierCreationForm = ({ operation }: any) => {
         bankBranchName: supplier?.bankBranchName || "",
         tin: supplier?.tin || "",
         bin: supplier?.bin || "",
-        tinPicturePath: supplier?.tinPicturePath || "",
-        binPicturePath: supplier?.binPicturePath || "",
+        tinPicturePath: supplier?.tinPicturePath || undefined,
+        binPicturePath: supplier?.binPicturePath || undefined,
         assetValue: supplier?.assetValue || "",
         contractCapacity: supplier?.contractCapacity || "",
         otherBusiness: supplier?.otherBusiness || false,
-        otherBusinessLicensesCopyPath:
-          supplier?.otherBusinessLicensesCopyPath || "",
         securityClearanceValidity: supplier?.securityClearanceValidity || "",
-        supplierPhotosPath: supplier?.supplierPhotosPath || "",
-        signaturePicturePath: supplier?.signaturePicturePath || "",
+        supplierPhotosPath: supplier?.supplierPhotosPath || undefined,
+        signaturePicturePath: supplier?.signaturePicturePath || undefined,
+        otherBusinessLicensesCopyPath:
+          supplier?.otherBusinessLicensesCopyPath || undefined,
       });
     }
   }, [operation, selectedId, supplier, form]);
@@ -132,16 +132,15 @@ const SupplierCreationForm = ({ operation }: any) => {
     },
   });
 
-  console.log("Form validation", form.formState.errors);
+  // console.log("Form validation", form.formState.errors);
+  // console.log("Form watch", form.watch());
 
   const onSubmit = (data: any) => {
-    console.log("Submitted data is ==", data);
-
-    // if (operation === "update") {
-    //   updateMutation.mutate({ id: selectedId, data });
-    // } else {
-    //   createMutation.mutate(data);
-    // }
+    if (operation === "update") {
+      updateMutation.mutate({ id: selectedId, data });
+    } else {
+      createMutation.mutate(data);
+    }
   };
 
   if (operation === "update") {
@@ -210,7 +209,7 @@ const SupplierCreationForm = ({ operation }: any) => {
             label="Contract Capacity"
             name="contractCapacity"
           />
-          <FormInput
+          <FormDatePicker
             form={form}
             label="Security Clearance Validity"
             name="securityClearanceValidity"
@@ -227,8 +226,9 @@ const SupplierCreationForm = ({ operation }: any) => {
           />
           <FormInput
             form={form}
+            type="checkbox"
             label="Have Other Businesses"
-            name="securityClearanceValidity"
+            name="otherBusiness"
           />
 
           <FormFileUpload
