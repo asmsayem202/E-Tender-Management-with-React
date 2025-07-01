@@ -4,6 +4,7 @@ import {
   updateSupplier,
 } from "@/api/supplier.api";
 import FormDatePicker from "@/components/Custom/FormDatePicker";
+import FormFileUpload from "@/components/Custom/FormFileUpload";
 import FormInput from "@/components/Custom/FormInput";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,7 +50,7 @@ const SupplierCreationForm = ({ operation }: any) => {
       binPicturePath: "",
       assetValue: "",
       contractCapacity: "",
-      otherBusiness: "",
+      otherBusiness: false,
       otherBusinessLicensesCopyPath: "",
       securityClearanceValidity: "",
       supplierPhotosPath: "",
@@ -79,9 +80,9 @@ const SupplierCreationForm = ({ operation }: any) => {
         bin: supplier?.bin || "",
         tinPicturePath: supplier?.tinPicturePath || "",
         binPicturePath: supplier?.binPicturePath || "",
-        assetValue: supplier?.assetValue || undefined,
-        contractCapacity: supplier?.contractCapacity || undefined,
-        otherBusiness: supplier?.otherBusiness || undefined,
+        assetValue: supplier?.assetValue || "",
+        contractCapacity: supplier?.contractCapacity || "",
+        otherBusiness: supplier?.otherBusiness || false,
         otherBusinessLicensesCopyPath:
           supplier?.otherBusinessLicensesCopyPath || "",
         securityClearanceValidity: supplier?.securityClearanceValidity || "",
@@ -131,12 +132,16 @@ const SupplierCreationForm = ({ operation }: any) => {
     },
   });
 
+  console.log("Form validation", form.formState.errors);
+
   const onSubmit = (data: any) => {
-    if (operation === "update") {
-      updateMutation.mutate({ id: selectedId, data });
-    } else {
-      createMutation.mutate(data);
-    }
+    console.log("Submitted data is ==", data);
+
+    // if (operation === "update") {
+    //   updateMutation.mutate({ id: selectedId, data });
+    // } else {
+    //   createMutation.mutate(data);
+    // }
   };
 
   if (operation === "update") {
@@ -189,12 +194,12 @@ const SupplierCreationForm = ({ operation }: any) => {
           <FormInput form={form} label="Branch Name" name="bankBranchName" />
           <FormInput form={form} label="BIN" name="bin" />
           <FormInput form={form} label="TIN" name="tin" />
-          <FormInput
+          <FormFileUpload
             form={form}
             label="Bin Picture Path"
             name="binPicturePath"
           />
-          <FormInput
+          <FormFileUpload
             form={form}
             label="Tin Picture Path"
             name="tinPicturePath"
@@ -210,18 +215,23 @@ const SupplierCreationForm = ({ operation }: any) => {
             label="Security Clearance Validity"
             name="securityClearanceValidity"
           />
-          <FormInput
+          <FormFileUpload
             form={form}
             label="Supplier Photos Path"
             name="supplierPhotosPath"
           />
-          <FormInput
+          <FormFileUpload
             form={form}
             label="Signature Picture Path"
             name="signaturePicturePath"
           />
-
           <FormInput
+            form={form}
+            label="Have Other Businesses"
+            name="securityClearanceValidity"
+          />
+
+          <FormFileUpload
             form={form}
             label="Other Business Licenses Copy Path"
             name="otherBusinessLicensesCopyPath"
