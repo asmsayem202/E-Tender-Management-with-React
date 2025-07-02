@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { FileUploader, FileInput } from "@/components/ui/file-upload";
 import { CloudUpload, Trash2 } from "lucide-react";
-import { cn, readImageFile } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Props {
   label?: string;
@@ -27,45 +28,72 @@ const FormFileUpload = ({
   error,
 }: Props) => {
   const [preview, setPreview] = useState<string>("");
-  const [file, setFile] = useState<File[] | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const dropZoneConfig = {
-    maxFiles: 5,
-    maxSize: 1024 * 1024 * 4,
-    multiple: true,
+    maxFiles: 1,
+    maxSize: 1024 * 1024 * 4, // 4MB
+    multiple: false,
+    accept: {
+      "image/*": [".png", ".jpeg", ".jpg", ".gif"],
+    },
   };
 
-  // ✅ Watch for real-time value updates from react-hook-form
-  const watchedFile = form.watch(name);
+  // Watch the form field value
+  const watchedValue = form.watch(name);
 
   useEffect(() => {
-    if (!watchedFile) {
+    if (!watchedValue) {
       setPreview("");
+      setFile(null);
       return;
     }
 
-    if (watchedFile instanceof File) {
-      readImageFile({ file: watchedFile, setterFunction: setPreview });
-    } else if (Array.isArray(watchedFile) && watchedFile[0] instanceof File) {
-      readImageFile({ file: watchedFile[0], setterFunction: setPreview });
-    } else if (typeof watchedFile === "string") {
-      setPreview(watchedFile); // e.g. preloaded URL
+    if (typeof watchedValue === "string") {
+      setPreview(watchedValue); // Base64 string or URL
+    } else {
+      console.warn(`Unexpected value type for ${name}:`, typeof watchedValue);
     }
-  }, [watchedFile]);
+  }, [watchedValue, name]);
 
   const handleFileChange = (value: File[] | null) => {
-    if (!disabled) {
-      setFile(value);
-      const newVal = value?.length === 1 ? value[0] : value || null;
-      form.setValue(name, newVal);
+    if (disabled) return;
+
+    const selectedFile = value && value.length > 0 ? value[0] : null;
+    setFile(selectedFile);
+
+    if (selectedFile) {
+      if (
+        !["image/png", "image/jpeg", "image/jpg", "image/gif"].includes(
+          selectedFile.type
+        )
+      ) {
+        toast.error("Please upload a valid image (PNG, JPEG, JPG, or GIF)");
+        form.setError(name, { message: "Invalid file type" });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        form.setValue(name, base64String, { shouldValidate: true });
+        setPreview(base64String);
+      };
+      reader.onerror = () => {
+        toast.error("Failed to read file");
+        form.setError(name, { message: "Failed to read file" });
+      };
+      reader.readAsDataURL(selectedFile);
+    } else {
+      form.setValue(name, "", { shouldValidate: true });
+      setPreview("");
     }
   };
 
   const handleRemove = () => {
     setFile(null);
     setPreview("");
-    form.setValue(name, null);
-    form.trigger(name);
+    form.setValue(name, "", { shouldValidate: true });
   };
 
   return (
@@ -81,7 +109,7 @@ const FormFileUpload = ({
       </div>
 
       <FileUploader
-        value={file}
+        value={file ? [file] : null}
         onValueChange={handleFileChange}
         dropzoneOptions={dropZoneConfig}
         className="relative bg-background rounded-lg p-2"
@@ -90,8 +118,9 @@ const FormFileUpload = ({
           <div
             className={cn(
               "group relative rounded-lg border bg-background p-1 transition-all w-[max-content] mx-auto",
-              "ring-2 ring-destructive/20",
-              "hover:border-muted-foreground/20"
+              error
+                ? "ring-2 ring-destructive/20"
+                : "hover:border-muted-foreground/20"
             )}
           >
             {!disabled && (
@@ -107,15 +136,11 @@ const FormFileUpload = ({
               </button>
             )}
             <div className="relative overflow-hidden rounded-md">
-              {preview.startsWith("data:application/pdf") ? (
-                <iframe src={preview} title="PDF Preview" width="100%" />
-              ) : (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="h-32 w-44 object-cover transition-transform group-hover:scale-105"
-                />
-              )}
+              <img
+                src={preview}
+                alt="Preview"
+                className="h-32 w-44 object-cover transition-transform group-hover:scale-105"
+              />
             </div>
           </div>
         ) : (
@@ -135,7 +160,7 @@ const FormFileUpload = ({
                 or drag and drop
               </p>
               <p className="text-xs text-gray-500">
-                SVG, PNG, JPG , PDF or GIF
+                PNG, JPEG, JPG, or GIF (max 4MB)
               </p>
             </div>
           </FileInput>

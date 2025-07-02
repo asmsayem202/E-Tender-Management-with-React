@@ -17,6 +17,7 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
+import { generateImgUrl } from "@/lib/utils";
 import { supplierSchema } from "@/schema/supplier.schema";
 import { useGlobalStore } from "@/store/store";
 import type { SUPPLIER } from "@/types/supplier.type";
@@ -46,15 +47,15 @@ const SupplierCreationForm = ({ operation }: any) => {
       bankBranchName: "",
       tin: "",
       bin: "",
-      tinPicturePath: undefined,
-      binPicturePath: undefined,
-      assetValue: "",
-      contractCapacity: "",
-      otherBusiness: false,
+      tinPicturePath: "",
+      binPicturePath: "",
+      assetValue: null,
+      contractCapacity: null,
+      otherBusiness: null,
       securityClearanceValidity: "",
-      supplierPhotosPath: undefined,
-      signaturePicturePath: undefined,
-      otherBusinessLicensesCopyPath: undefined,
+      supplierPhotosPath: "",
+      signaturePicturePath: "",
+      otherBusinessLicensesCopyPath: "",
     },
   });
 
@@ -78,16 +79,17 @@ const SupplierCreationForm = ({ operation }: any) => {
         bankBranchName: supplier?.bankBranchName || "",
         tin: supplier?.tin || "",
         bin: supplier?.bin || "",
-        tinPicturePath: supplier?.tinPicturePath || undefined,
-        binPicturePath: supplier?.binPicturePath || undefined,
-        assetValue: supplier?.assetValue || "",
-        contractCapacity: supplier?.contractCapacity || "",
-        otherBusiness: supplier?.otherBusiness || false,
+        tinPicturePath: generateImgUrl(supplier?.tinPicturePath) || "",
+        binPicturePath: generateImgUrl(supplier?.binPicturePath) || "",
+        assetValue: supplier?.assetValue || null,
+        contractCapacity: supplier?.contractCapacity || null,
+        otherBusiness: supplier?.otherBusiness || null,
         securityClearanceValidity: supplier?.securityClearanceValidity || "",
-        supplierPhotosPath: supplier?.supplierPhotosPath || undefined,
-        signaturePicturePath: supplier?.signaturePicturePath || undefined,
+        supplierPhotosPath: generateImgUrl(supplier?.supplierPhotosPath) || "",
+        signaturePicturePath:
+          generateImgUrl(supplier?.signaturePicturePath) || "",
         otherBusinessLicensesCopyPath:
-          supplier?.otherBusinessLicensesCopyPath || undefined,
+          generateImgUrl(supplier?.otherBusinessLicensesCopyPath) || "",
       });
     }
   }, [operation, selectedId, supplier, form]);

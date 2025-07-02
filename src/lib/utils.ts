@@ -14,28 +14,6 @@ export const generateImgUrl = (link: any): string => {
   }
 };
 
-export const readImageFile = ({
-  setterFunction,
-  file,
-}: {
-  setterFunction: (result: string) => void;
-  file: File;
-}) => {
-  const reader = new FileReader();
-
-  reader.onload = () => {
-    const result = reader.result;
-
-    if (typeof result === "string") {
-      setterFunction(result);
-    } else {
-      console.error("Unexpected result type : ", result);
-    }
-  };
-
-  reader.readAsDataURL(file);
-};
-
 export function formatDateTime(date: Date): string {
   const pad = (n: number): string => n.toString().padStart(2, "0");
 
