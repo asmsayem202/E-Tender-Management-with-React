@@ -3,6 +3,7 @@ import {
   getSupplier,
   updateSupplier,
 } from "@/api/supplier.api";
+import FormCheckbox from "@/components/Custom/FormCheckbox";
 import FormDatePicker from "@/components/Custom/FormDatePicker";
 import FormFileUpload from "@/components/Custom/FormFileUpload";
 import FormInput from "@/components/Custom/FormInput";
@@ -49,9 +50,9 @@ const SupplierCreationForm = ({ operation }: any) => {
       bin: "",
       tinPicturePath: "",
       binPicturePath: "",
-      assetValue: null,
-      contractCapacity: null,
-      otherBusiness: null,
+      assetValue: undefined,
+      contractCapacity: undefined,
+      otherBusiness: undefined,
       securityClearanceValidity: "",
       supplierPhotosPath: "",
       signaturePicturePath: "",
@@ -81,9 +82,9 @@ const SupplierCreationForm = ({ operation }: any) => {
         bin: supplier?.bin || "",
         tinPicturePath: generateImgUrl(supplier?.tinPicturePath) || "",
         binPicturePath: generateImgUrl(supplier?.binPicturePath) || "",
-        assetValue: supplier?.assetValue || null,
-        contractCapacity: supplier?.contractCapacity || null,
-        otherBusiness: supplier?.otherBusiness || null,
+        assetValue: supplier?.assetValue || undefined,
+        contractCapacity: supplier?.contractCapacity || undefined,
+        otherBusiness: Boolean(supplier?.otherBusiness),
         securityClearanceValidity: supplier?.securityClearanceValidity || "",
         supplierPhotosPath: generateImgUrl(supplier?.supplierPhotosPath) || "",
         signaturePicturePath:
@@ -226,18 +227,25 @@ const SupplierCreationForm = ({ operation }: any) => {
             label="Signature Picture Path"
             name="signaturePicturePath"
           />
-          <FormInput
-            form={form}
-            type="checkbox"
+
+          <FormCheckbox
+            size="size-5"
             label="Have Other Businesses"
-            name="otherBusiness"
+            checked={!!form.getValues("otherBusiness")}
+            id="otherBusiness"
+            detail="check if you done"
+            onClick={() =>
+              form.setValue("otherBusiness", !form.getValues("otherBusiness"))
+            }
           />
 
-          <FormFileUpload
-            form={form}
-            label="Other Business Licenses Copy Path"
-            name="otherBusinessLicensesCopyPath"
-          />
+          {form.watch("otherBusiness") && (
+            <FormFileUpload
+              form={form}
+              label="Other Business Licenses Copy Path"
+              name="otherBusinessLicensesCopyPath"
+            />
+          )}
         </Form>
 
         {/* body end */}
