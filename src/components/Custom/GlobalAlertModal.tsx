@@ -10,35 +10,54 @@ import {
 import { useGlobalStore } from "@/store/store";
 import { Button } from "../ui/button";
 
-const GlobalAlertModal = ({ mutation }: any) => {
-  const selectedId = useGlobalStore((state) => state.selectedId);
-  const alertModal = useGlobalStore((state) => state.alertModal);
+const GlobalAlertModal = ({
+  mutations,
+  data = {},
+}: {
+  mutations: Record<string, any>;
+  data?: Record<string, any>;
+}) => {
+  const { isOpen, title, description, confirmText, variant, action } =
+    useGlobalStore((state) => state.alertModal);
   const closeAlertModal = useGlobalStore((state) => state.closeAlertModal);
-  // console.log("selectedId", selectedId);
+  const selectedId = useGlobalStore((state) => state.selectedId);
+
+  if (!action || !Object.prototype.hasOwnProperty.call(mutations, action))
+    return null;
+
+  const mutation = mutations[action];
+  const actionPayload = data?.[action] ?? {};
+
+  const isPayloadAction = action !== "delete";
+
+  const handleClick = () => {
+    if (!mutation) return;
+
+    if (isPayloadAction) {
+      mutation.mutate({ id: selectedId, data: actionPayload });
+    } else {
+      mutation.mutate(selectedId);
+    }
+  };
 
   return (
-    <AlertDialog open={alertModal} onOpenChange={() => closeAlertModal()}>
+    <AlertDialog open={isOpen} onOpenChange={closeAlertModal}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to delete this data?
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your data
-            from our server.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
-            variant="destructive"
-            onClick={() => mutation.mutate(selectedId)}
+            variant={variant}
+            onClick={handleClick}
             disabled={mutation?.isPending}
             isLoading={mutation?.isPending}
             className="w-[80px]"
           >
-            Delete
+            {confirmText}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

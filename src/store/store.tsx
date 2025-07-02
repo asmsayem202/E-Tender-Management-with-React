@@ -1,9 +1,18 @@
 import { create } from "zustand";
 
+type AlertModalType = {
+  isOpen?: boolean;
+  title: string;
+  description: string;
+  confirmText: string;
+  variant: "default" | "destructive";
+  action: "delete" | "approve" | "decline"; // You can expand this
+};
+
 type State = {
   user: any;
   drawer: any;
-  alertModal: boolean;
+  alertModal: Partial<AlertModalType>;
   selectedId: any;
   selectedData: any;
 };
@@ -12,7 +21,7 @@ type Actions = {
   setUser: (user: any) => void;
   openDrawer: (currentDrawer: any) => void;
   closeDrawer: () => void;
-  openAlertModal: () => void;
+  openAlertModal: (config: AlertModalType) => void;
   closeAlertModal: () => void;
   setSelectedId: (id: any) => void;
   setSelectedData: (obj: any) => void;
@@ -44,15 +53,19 @@ export const useGlobalStore = create<State & Actions>((set) => ({
       selectedId: null,
     }),
 
-  openAlertModal: () => {
+  openAlertModal: (config: AlertModalType) =>
     set({
-      alertModal: true,
-    });
-  },
+      alertModal: {
+        ...config,
+        isOpen: true,
+      },
+    }),
 
   closeAlertModal: () =>
     set({
-      alertModal: false,
+      alertModal: {
+        isOpen: false,
+      },
       selectedId: null,
     }),
 

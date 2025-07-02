@@ -15,8 +15,14 @@ export const supplierSchema = z.object({
   bin: z.string().min(3),
   tinPicturePath: z.string().nullable(),
   binPicturePath: z.string().nullable(),
-  assetValue: z.number().nullable(),
-  contractCapacity: z.number().nullable(),
+  assetValue: z
+    .string()
+    .optional()
+    .transform((val) => (val ? Number(val) : undefined)),
+  contractCapacity: z
+    .string()
+    .optional()
+    .transform((val) => (val ? Number(val) : undefined)),
   otherBusiness: z.boolean().nullable(),
   securityClearanceValidity: z.string().nullable(),
   supplierPhotosPath: z.string().nullable(),

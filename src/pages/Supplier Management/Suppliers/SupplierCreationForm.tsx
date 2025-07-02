@@ -82,8 +82,15 @@ const SupplierCreationForm = ({ operation }: any) => {
         bin: supplier?.bin || "",
         tinPicturePath: generateImgUrl(supplier?.tinPicturePath) || "",
         binPicturePath: generateImgUrl(supplier?.binPicturePath) || "",
-        assetValue: supplier?.assetValue || undefined,
-        contractCapacity: supplier?.contractCapacity || undefined,
+        assetValue:
+          supplier?.assetValue !== undefined && supplier?.assetValue !== null
+            ? String(supplier.assetValue)
+            : undefined,
+        contractCapacity:
+          supplier?.contractCapacity !== undefined &&
+          supplier?.contractCapacity !== null
+            ? String(supplier.contractCapacity)
+            : undefined,
         otherBusiness: Boolean(supplier?.otherBusiness),
         securityClearanceValidity: supplier?.securityClearanceValidity || "",
         supplierPhotosPath: generateImgUrl(supplier?.supplierPhotosPath) || "",
@@ -233,7 +240,6 @@ const SupplierCreationForm = ({ operation }: any) => {
             label="Have Other Businesses"
             checked={!!form.getValues("otherBusiness")}
             id="otherBusiness"
-            detail="check if you done"
             onClick={() =>
               form.setValue("otherBusiness", !form.getValues("otherBusiness"))
             }

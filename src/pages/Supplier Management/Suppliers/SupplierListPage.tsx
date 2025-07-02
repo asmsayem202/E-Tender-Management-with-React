@@ -1,14 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { useGlobalStore } from "@/store/store";
 import GlobalDrawer from "@/components/Custom/GlobalDrawer";
-import { EditIcon, EllipsisIcon, TrashIcon } from "lucide-react";
+import { Ban, EditIcon, EllipsisIcon, Send, TrashIcon } from "lucide-react";
 import { DataTable } from "@/components/Custom/DataTable";
 import TableAction from "@/components/Custom/TableAction";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useFetchData from "@/hooks/useFetchData";
 import GlobalAlertModal from "@/components/Custom/GlobalAlertModal";
-import { deleteSupplier, getAllSupplier } from "@/api/supplier.api";
+import {
+  approveSupplier,
+  declineSupplier,
+  deleteSupplier,
+  getAllSupplier,
+} from "@/api/supplier.api";
 import type { SUPPLIER } from "@/types/supplier.type";
 import SupplierCreationForm from "./SupplierCreationForm";
 
@@ -17,6 +22,7 @@ const SupplierListPage = () => {
   const openDrawer = useGlobalStore((state) => state.openDrawer);
   const openAlertModal = useGlobalStore((state) => state.openAlertModal);
   const closeAlertModal = useGlobalStore((state) => state.closeAlertModal);
+  const user: any = useGlobalStore((state) => state.user);
   const { data, isLoading, refetch } = useFetchData(["supplier"], () =>
     getAllSupplier("")
   );
@@ -37,36 +43,122 @@ const SupplierListPage = () => {
     },
   });
 
-  const actionItems = (data: SUPPLIER) => [
-    {
-      label: (
-        <button
-          onClick={() => {
-            setSelectedId(data?.id as number);
-            openDrawer("update-supplier");
-          }}
-          className="flex items-center gap-3 w-full cursor-pointer"
-        >
-          <EditIcon size={20} />
-          <span>Edit</span>
-        </button>
-      ),
+  const approveMutation = useMutation({
+    mutationFn: approveSupplier,
+    onSuccess: () => {
+      toast.success("Supplier Approved Successful");
+      refetch();
+      closeAlertModal();
     },
-    {
-      label: (
-        <button
-          onClick={() => {
-            setSelectedId(data?.id as number);
-            openAlertModal();
-          }}
-          className="flex items-center gap-3 w-full"
-        >
-          <TrashIcon size={20} />
-          <span>Delete</span>
-        </button>
-      ),
+    onError: (error) => {
+      console.log(error);
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "An error occurred");
     },
-  ];
+  });
+
+  const declineMutation = useMutation({
+    mutationFn: declineSupplier,
+    onSuccess: () => {
+      toast.success("Supplier Declined Successful");
+      refetch();
+      closeAlertModal();
+    },
+    onError: (error) => {
+      console.log(error);
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "An error occurred");
+    },
+  });
+
+  const actionItems = (data: SUPPLIER) => {
+    const items = [
+      {
+        label: (
+          <button
+            onClick={() => {
+              setSelectedId(data?.id as number);
+              openDrawer("update-supplier");
+            }}
+            className="flex items-center gap-3 w-full cursor-pointer"
+          >
+            <EditIcon size={20} />
+            <span>Edit</span>
+          </button>
+        ),
+      },
+      {
+        label: (
+          <button
+            onClick={() => {
+              setSelectedId(data?.id as number);
+              openAlertModal({
+                action: "delete",
+                title: "Confirm to delete Supplier",
+                description:
+                  "Are you sure you want to delete this Supplier? This action cannot be undone.",
+                confirmText: "Delete",
+                variant: "destructive",
+              });
+            }}
+            className="flex items-center gap-3 w-full"
+          >
+            <TrashIcon size={20} />
+            <span>Delete</span>
+          </button>
+        ),
+      },
+    ];
+
+    if (data?.approvalStatus === "Pending") {
+      items.push(
+        {
+          label: (
+            <button
+              onClick={() => {
+                setSelectedId(data?.id as number);
+                openAlertModal({
+                  action: "approve",
+                  title: "Confirm to Approve Supplier",
+                  description:
+                    "Are you sure you want to Approve this Supplier?",
+                  confirmText: "Approved",
+                  variant: "default",
+                });
+              }}
+              className="flex items-center gap-3 w-full"
+            >
+              <Send size={20} />
+              <span>Approve</span>
+            </button>
+          ),
+        },
+        {
+          label: (
+            <button
+              onClick={() => {
+                setSelectedId(data?.id as number);
+                openAlertModal({
+                  action: "decline",
+                  title: "Confirm to Decline Supplier",
+                  description:
+                    "Are you sure you want to Decline this Supplier?",
+                  confirmText: "Declined",
+                  variant: "destructive",
+                });
+              }}
+              className="flex items-center gap-3 w-full"
+            >
+              <Ban size={20} />
+              <span>Decline</span>
+            </button>
+          ),
+        }
+      );
+    }
+
+    return items;
+  };
 
   return (
     <div>
@@ -101,6 +193,10 @@ const SupplierListPage = () => {
             header: "Email",
           },
           {
+            accessorKey: "approvalStatus",
+            header: "Status",
+          },
+          {
             header: "Actions",
             cell: ({ original }) => (
               <TableAction
@@ -119,7 +215,21 @@ const SupplierListPage = () => {
         <SupplierCreationForm operation="update" />
       </GlobalDrawer>
 
-      <GlobalAlertModal mutation={deleteMutation} />
+      <GlobalAlertModal
+        mutations={{
+          delete: deleteMutation,
+          approve: approveMutation,
+          decline: declineMutation,
+        }}
+        data={{
+          approve: { userId: user?.sub, isApproved: true, remarks: "Approved" },
+          decline: {
+            userId: user?.sub,
+            isApproved: false,
+            remarks: "Declined",
+          },
+        }}
+      />
     </div>
   );
 };
