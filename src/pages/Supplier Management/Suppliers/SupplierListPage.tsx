@@ -201,19 +201,19 @@ const SupplierListPage = () => {
               const getStatusClass = (status: string) => {
                 switch (status) {
                   case "Pending":
-                    return "text-orange-600";
+                    return "bg-orange-100 text-orange-800 border border-orange-500";
                   case "Approved":
-                    return "text-green-600";
+                    return "bg-green-100 text-green-800 border border-green-500";
                   case "Declined":
-                    return "text-red-600";
+                    return "bg-red-100 text-red-800 border border-red-500";
                   default:
-                    return "text-gray-600";
+                    return "bg-gray-100 text-gray-800 border border-gray-500";
                 }
               };
 
               return (
                 <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusClass(
+                  className={`px-2 py-1 text-xs font-medium rounded-md ${getStatusClass(
                     status ?? ""
                   )}`}
                 >
