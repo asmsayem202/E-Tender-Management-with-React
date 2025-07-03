@@ -73,17 +73,10 @@ const FormFileUpload = ({
         return;
       }
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        form.setValue(name, base64String, { shouldValidate: true });
-        setPreview(base64String);
-      };
-      reader.onerror = () => {
-        toast.error("Failed to read file");
-        form.setError(name, { message: "Failed to read file" });
-      };
-      reader.readAsDataURL(selectedFile);
+      form.setValue(name, selectedFile, { shouldValidate: true });
+
+      const previewUrl = URL.createObjectURL(selectedFile);
+      setPreview(previewUrl);
     } else {
       form.setValue(name, "", { shouldValidate: true });
       setPreview("");

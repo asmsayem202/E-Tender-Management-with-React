@@ -240,9 +240,19 @@ const SupplierCreationForm = ({ operation }: any) => {
             label="Have Other Businesses"
             checked={!!form.getValues("otherBusiness")}
             id="otherBusiness"
-            onClick={() =>
-              form.setValue("otherBusiness", !form.getValues("otherBusiness"))
-            }
+            onClick={() => {
+              const currentValue = form.getValues("otherBusiness");
+              const newValue = !currentValue;
+
+              form.setValue("otherBusiness", newValue);
+
+              // If unchecked, clear the related file path
+              if (!newValue) {
+                form.setValue("otherBusinessLicensesCopyPath", null, {
+                  shouldValidate: true,
+                });
+              }
+            }}
           />
 
           {form.watch("otherBusiness") && (

@@ -13,8 +13,8 @@ export const supplierSchema = z.object({
   bankBranchName: z.string().min(3),
   tin: z.string().min(3),
   bin: z.string().min(3),
-  tinPicturePath: z.string().nullable(),
-  binPicturePath: z.string().nullable(),
+  tinPicturePath: z.any().nullable(),
+  binPicturePath: z.any().nullable(),
   assetValue: z
     .string()
     .optional()
@@ -25,7 +25,7 @@ export const supplierSchema = z.object({
     .transform((val) => (val ? Number(val) : undefined)),
   otherBusiness: z.boolean().nullable(),
   securityClearanceValidity: z.string().nullable(),
-  supplierPhotosPath: z.string().nullable(),
-  signaturePicturePath: z.string().nullable(),
-  otherBusinessLicensesCopyPath: z.string().nullable(),
+  supplierPhotosPath: z.any().nullable(),
+  signaturePicturePath: z.any().nullable(),
+  otherBusinessLicensesCopyPath: z.any().nullable(),
 });
