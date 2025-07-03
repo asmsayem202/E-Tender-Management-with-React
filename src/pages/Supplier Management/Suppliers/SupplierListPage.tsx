@@ -195,7 +195,34 @@ const SupplierListPage = () => {
           {
             accessorKey: "approvalStatus",
             header: "Status",
+            cell: ({ original }) => {
+              const status = original.approvalStatus;
+
+              const getStatusClass = (status: string) => {
+                switch (status) {
+                  case "Pending":
+                    return "text-orange-600";
+                  case "Approved":
+                    return "text-green-600";
+                  case "Declined":
+                    return "text-red-600";
+                  default:
+                    return "text-gray-600";
+                }
+              };
+
+              return (
+                <span
+                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusClass(
+                    status ?? ""
+                  )}`}
+                >
+                  {status}
+                </span>
+              );
+            },
           },
+
           {
             header: "Actions",
             cell: ({ original }) => (
