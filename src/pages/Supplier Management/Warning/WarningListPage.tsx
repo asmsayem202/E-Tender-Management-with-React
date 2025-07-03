@@ -57,7 +57,14 @@ const WarningListPage = () => {
         <button
           onClick={() => {
             setSelectedId(data?.id as number);
-            openAlertModal();
+            openAlertModal({
+              action: "delete",
+              title: "Confirm to delete Warning",
+              description:
+                "Are you sure you want to delete this Warning? This action cannot be undone.",
+              confirmText: "Delete",
+              variant: "destructive",
+            });
           }}
           className="flex items-center gap-3 w-full"
         >
@@ -102,8 +109,7 @@ const WarningListPage = () => {
       <GlobalDrawer name="update-warning">
         <WarningCreationForm operation="update" />
       </GlobalDrawer>
-
-      <GlobalAlertModal mutation={deleteMutation} />
+      <GlobalAlertModal mutations={{ delete: deleteMutation }} />
     </div>
   );
 };

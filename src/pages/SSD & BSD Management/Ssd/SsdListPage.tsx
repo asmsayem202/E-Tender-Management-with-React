@@ -75,7 +75,14 @@ const SsdListPage = () => {
         <button
           onClick={() => {
             setSelectedId(data?.id as number);
-            openAlertModal();
+            openAlertModal({
+              action: "delete",
+              title: "Confirm to delete SSD",
+              description:
+                "Are you sure you want to delete this SSD? This action cannot be undone.",
+              confirmText: "Delete",
+              variant: "destructive",
+            });
           }}
           className="flex items-center gap-3 w-full"
         >
@@ -150,8 +157,6 @@ const SsdListPage = () => {
       <GlobalDrawer name="update-ssd">
         <SsdCreationForm operation="update" />
       </GlobalDrawer>
-
-      {/* <GlobalAlertModal mutation={deactivateMutation} /> */}
     </div>
   );
 };

@@ -57,7 +57,14 @@ const ItemListPage = () => {
         <button
           onClick={() => {
             setSelectedId(data?.id as number);
-            openAlertModal();
+            openAlertModal({
+              action: "delete",
+              title: "Confirm to delete Item",
+              description:
+                "Are you sure you want to delete this Item? This action cannot be undone.",
+              confirmText: "Delete",
+              variant: "destructive",
+            });
           }}
           className="flex items-center gap-3 w-full"
         >
@@ -112,8 +119,7 @@ const ItemListPage = () => {
       <GlobalDrawer name="update-item">
         <ItemCreationForm operation="update" />
       </GlobalDrawer>
-
-      <GlobalAlertModal mutation={deleteMutation} />
+      <GlobalAlertModal mutations={{ delete: deleteMutation }} />
     </div>
   );
 };
