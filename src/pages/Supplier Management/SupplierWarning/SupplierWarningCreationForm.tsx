@@ -1,11 +1,6 @@
 import { getSupplierWarning } from "@/api/supplier-warning.api";
 import { getAllSupplier } from "@/api/supplier.api";
-import {
-  createWarning,
-  getAllWarning,
-  getWarning,
-  updateWarning,
-} from "@/api/warning.api";
+import { createWarning, getAllWarning, updateWarning } from "@/api/warning.api";
 import FormSearchSelect from "@/components/Custom/FormSearchSelect";
 import FormTextArea from "@/components/Custom/FormTextArea";
 import { Button } from "@/components/ui/button";
