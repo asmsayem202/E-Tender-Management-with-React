@@ -20,6 +20,7 @@ import ItemListPage from "@/pages/Perishable-Item/Item/ItemListPage";
 import WarningListPage from "@/pages/Supplier Management/Warning/WarningListPage";
 import SupplierListPage from "@/pages/Supplier Management/Suppliers/SupplierListPage";
 import SupplierWarningListPage from "@/pages/Supplier Management/SupplierWarning/SupplierWarningListPage";
+import SupplierBlacklistListPage from "@/pages/Supplier Management/SupplierBlacklist/SupplierBlacklistListPage";
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
       {
         path: "supplier-management/supplier-warning-list",
         element: <SupplierWarningListPage />,
+      },
+      {
+        path: "supplier-management/supplier-blacklist-list",
+        element: <SupplierBlacklistListPage />,
       },
       {
         path: "perishable-product/parent-category-list",

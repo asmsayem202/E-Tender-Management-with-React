@@ -75,8 +75,8 @@ const data = {
         },
         {
           title: "Blacklist Supplier",
-          active: "blacklist-supplier-list",
-          url: "supplier-management/blacklist-supplier-list",
+          active: "supplier-blacklist-list",
+          url: "supplier-management/supplier-blacklist-list",
           icon: SquareChartGantt,
         },
       ],
