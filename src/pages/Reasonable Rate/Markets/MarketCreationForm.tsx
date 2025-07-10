@@ -1,6 +1,5 @@
-import { createFactor, getFactor, updateFactor } from "@/api/factor.api";
+import { createMarket, getMarket, updateMarket } from "@/api/market.api";
 import FormInput from "@/components/Custom/FormInput";
-import FormTextArea from "@/components/Custom/FormTextArea";
 import { Button } from "@/components/ui/button";
 import {
   DrawerClose,
@@ -12,9 +11,9 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
-import { factorSchema } from "@/schema/factor.schema";
+import { marketSchema } from "@/schema/market.schema";
 import { useGlobalStore } from "@/store/store";
-import type { FACTOR } from "@/types/factor.type";
+import type { MARKET } from "@/types/market.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -22,44 +21,40 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const FactorCreationForm = ({ operation }: any) => {
+const MarketCreationForm = ({ operation }: any) => {
   const query = useQueryClient();
   const selectedId = useGlobalStore((state) => state.selectedId);
   const closeDrawer = useGlobalStore((state) => state.closeDrawer);
   const form = useForm({
-    resolver: zodResolver(factorSchema),
+    resolver: zodResolver(marketSchema),
     defaultValues: {
       name: "",
-      percentageRate: "",
-      description: "",
     },
   });
 
   const { data, isLoading } = useFetchData(
-    ["factor", selectedId],
-    () => getFactor(selectedId),
+    ["market", selectedId],
+    () => getMarket(selectedId),
     {
-      queryKey: ["factor", selectedId],
+      queryKey: ["market", selectedId],
       enabled: selectedId !== null,
     }
   );
-  const factor: FACTOR | null = data?.data ?? null;
+  const market: MARKET | null = data?.data ?? null;
 
   useEffect(() => {
     if (operation === "update") {
       form.reset({
-        name: factor?.name || "",
-        percentageRate: factor?.percentageRate.toString() || "",
-        description: factor?.description || "",
+        name: market?.name || "",
       });
     }
-  }, [operation, selectedId, factor, form]);
+  }, [operation, selectedId, market, form]);
 
   const createMutation = useMutation({
-    mutationFn: createFactor,
+    mutationFn: createMarket,
     onSuccess: () => {
-      toast.success("Factor Create Successful");
-      query.invalidateQueries({ queryKey: ["factor"] });
+      toast.success("Market Create Successful");
+      query.invalidateQueries({ queryKey: ["market"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -76,10 +71,10 @@ const FactorCreationForm = ({ operation }: any) => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateFactor,
+    mutationFn: updateMarket,
     onSuccess: () => {
-      toast.success("Factor Update Successful");
-      query.invalidateQueries({ queryKey: ["factor"] });
+      toast.success("Market Update Successful");
+      query.invalidateQueries({ queryKey: ["market"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -117,24 +112,19 @@ const FactorCreationForm = ({ operation }: any) => {
     <React.Fragment>
       <DrawerHeader className="gap-1">
         <DrawerTitle>
-          {operation === "update" ? "Update Factor" : "Create Factor"}
+          {operation === "update" ? "Update Market" : "Create Market"}
         </DrawerTitle>
         <DrawerDescription>
           Fill up the details below to{" "}
-          {operation === "update" ? "update" : "create"} Factor.
+          {operation === "update" ? "update" : "create"} Market.
         </DrawerDescription>
       </DrawerHeader>
       <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
         <Separator />
         {/*  body start */}
+
         <Form {...form}>
           <FormInput form={form} label="Name" name="name" />
-          <FormInput
-            form={form}
-            label="Percentage Rate"
-            name="percentageRate"
-          />
-          <FormTextArea form={form} label="Description" name="description" />
         </Form>
 
         {/* body end */}
@@ -154,4 +144,4 @@ const FactorCreationForm = ({ operation }: any) => {
   );
 };
 
-export default FactorCreationForm;
+export default MarketCreationForm;

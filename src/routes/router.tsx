@@ -22,6 +22,7 @@ import SupplierListPage from "@/pages/Supplier Management/Suppliers/SupplierList
 import SupplierWarningListPage from "@/pages/Supplier Management/SupplierWarning/SupplierWarningListPage";
 import SupplierBlacklistListPage from "@/pages/Supplier Management/SupplierBlacklist/SupplierBlacklistListPage";
 import FactorListPage from "@/pages/Reasonable Rate/Factor/FactorListPage";
+import MarketListPage from "@/pages/Reasonable Rate/Markets/MarketListPage";
 
 export const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ export const router = createBrowserRouter([
       {
         path: "reasonable-rate/factor-list",
         element: <FactorListPage />,
+      },
+      {
+        path: "reasonable-rate/markets-list",
+        element: <MarketListPage />,
       },
       {
         path: "setting/cantonment-list",
