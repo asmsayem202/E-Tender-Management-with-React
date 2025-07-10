@@ -21,6 +21,7 @@ import WarningListPage from "@/pages/Supplier Management/Warning/WarningListPage
 import SupplierListPage from "@/pages/Supplier Management/Suppliers/SupplierListPage";
 import SupplierWarningListPage from "@/pages/Supplier Management/SupplierWarning/SupplierWarningListPage";
 import SupplierBlacklistListPage from "@/pages/Supplier Management/SupplierBlacklist/SupplierBlacklistListPage";
+import FactorListPage from "@/pages/Reasonable Rate/Factor/FactorListPage";
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +87,10 @@ export const router = createBrowserRouter([
       {
         path: "perishable-product/item-list",
         element: <ItemListPage />,
+      },
+      {
+        path: "reasonable-rate/factor-list",
+        element: <FactorListPage />,
       },
       {
         path: "setting/cantonment-list",

@@ -1,4 +1,5 @@
 import { getAllCategory } from "@/api/category.api";
+import { createFactor, getFactor, updateFactor } from "@/api/factor.api";
 import { createItem, getItem, updateItem } from "@/api/item.api";
 import { getAllUnit } from "@/api/unit.api";
 import FormInput from "@/components/Custom/FormInput";
@@ -15,11 +16,9 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
-import { itemSchema } from "@/schema/item.schema";
+import { factorSchema } from "@/schema/factor.schema";
 import { useGlobalStore } from "@/store/store";
-import type { CATEGORY } from "@/types/category.type";
-import type { ITEM } from "@/types/item.type";
-import type { UNIT } from "@/types/unit.type";
+import type { FACTOR } from "@/types/factor.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -27,54 +26,44 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const ItemCreationForm = ({ operation }: any) => {
+const FactorCreationForm = ({ operation }: any) => {
   const query = useQueryClient();
   const selectedId = useGlobalStore((state) => state.selectedId);
   const closeDrawer = useGlobalStore((state) => state.closeDrawer);
   const form = useForm({
-    resolver: zodResolver(itemSchema),
+    resolver: zodResolver(factorSchema),
     defaultValues: {
       name: "",
+      percentageRate: "",
       description: "",
-      categoryId: "",
-      unitId: "",
     },
   });
 
   const { data, isLoading } = useFetchData(
-    ["item", selectedId],
-    () => getItem(selectedId),
+    ["factor", selectedId],
+    () => getFactor(selectedId),
     {
-      queryKey: ["item", selectedId],
+      queryKey: ["factor", selectedId],
       enabled: selectedId !== null,
     }
   );
-  const item: ITEM | null = data?.data ?? null;
-
-  const { data: allCategories } = useFetchData(["category"], () =>
-    getAllCategory()
-  );
-  const categories: CATEGORY[] = allCategories?.data ?? [];
-
-  const { data: allUnits } = useFetchData(["unit"], () => getAllUnit());
-  const units: UNIT[] = allUnits?.data ?? [];
+  const factor: FACTOR | null = data?.data ?? null;
 
   useEffect(() => {
     if (operation === "update") {
       form.reset({
-        name: item?.name || "",
-        description: item?.description || "",
-        categoryId: item?.categoryId?.toString() || "",
-        unitId: item?.unitId?.toString() || "",
+        name: factor?.name || "",
+        percentageRate: factor?.percentageRate.toString() || "",
+        description: factor?.description || "",
       });
     }
-  }, [operation, selectedId, item, form]);
+  }, [operation, selectedId, factor, form]);
 
   const createMutation = useMutation({
-    mutationFn: createItem,
+    mutationFn: createFactor,
     onSuccess: () => {
-      toast.success("Item Create Successful");
-      query.invalidateQueries({ queryKey: ["item"] });
+      toast.success("Factor Create Successful");
+      query.invalidateQueries({ queryKey: ["factor"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -91,10 +80,10 @@ const ItemCreationForm = ({ operation }: any) => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateItem,
+    mutationFn: updateFactor,
     onSuccess: () => {
-      toast.success("Item Update Successful");
-      query.invalidateQueries({ queryKey: ["item"] });
+      toast.success("Factor Update Successful");
+      query.invalidateQueries({ queryKey: ["factor"] });
       closeDrawer();
     },
     onError: (error: unknown) => {
@@ -132,32 +121,23 @@ const ItemCreationForm = ({ operation }: any) => {
     <React.Fragment>
       <DrawerHeader className="gap-1">
         <DrawerTitle>
-          {operation === "update" ? "Update Item" : "Create Item"}
+          {operation === "update" ? "Update Factor" : "Create Factor"}
         </DrawerTitle>
         <DrawerDescription>
           Fill up the details below to{" "}
-          {operation === "update" ? "update" : "create"} Item.
+          {operation === "update" ? "update" : "create"} Factor.
         </DrawerDescription>
       </DrawerHeader>
       <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
         <Separator />
         {/*  body start */}
         <Form {...form}>
-          <FormSelect
-            form={form}
-            label="Category"
-            name="categoryId"
-            placeholder="Select a category"
-            options={categories}
-          />
-          <FormSelect
-            form={form}
-            label="Unit"
-            name="unitId"
-            placeholder="Select a unit"
-            options={units}
-          />
           <FormInput form={form} label="Name" name="name" />
+          <FormInput
+            form={form}
+            label="Percentage Rate"
+            name="percentageRate"
+          />
           <FormTextArea form={form} label="Description" name="description" />
         </Form>
 
@@ -178,4 +158,4 @@ const ItemCreationForm = ({ operation }: any) => {
   );
 };
 
-export default ItemCreationForm;
+export default FactorCreationForm;
