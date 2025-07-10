@@ -1,18 +1,38 @@
 import { z } from "zod";
 
 export const supplierSchema = z.object({
-  name: z.string().min(3),
-  contactPerson: z.string().min(3),
-  mobileNo: z.string().min(3),
-  email: z.string().min(3),
-  ascLicenseNo: z.string().min(3),
+  name: z.string().min(1, {
+    message: "This is required",
+  }),
+  contactPerson: z.string().min(1, {
+    message: "This is required",
+  }),
+  mobileNo: z.string().min(1, {
+    message: "This is required",
+  }),
+  email: z.string().min(1, {
+    message: "This is required",
+  }),
+  ascLicenseNo: z.string().min(1, {
+    message: "This is required",
+  }),
   ascLicenseEndorsementDate: z.string().nullable(),
   ascLicenseExpiryDate: z.string().nullable(),
-  bankAccountName: z.string().min(3),
-  bankAccountNo: z.string().min(3),
-  bankBranchName: z.string().min(3),
-  tin: z.string().min(3),
-  bin: z.string().min(3),
+  bankAccountName: z.string().min(1, {
+    message: "This is required",
+  }),
+  bankAccountNo: z.string().min(1, {
+    message: "This is required",
+  }),
+  bankBranchName: z.string().min(1, {
+    message: "This is required",
+  }),
+  tin: z.string().min(1, {
+    message: "This is required",
+  }),
+  bin: z.string().min(1, {
+    message: "This is required",
+  }),
   tinPicturePath: z.any().nullable(),
   binPicturePath: z.any().nullable(),
   assetValue: z

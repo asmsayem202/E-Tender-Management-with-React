@@ -1,6 +1,10 @@
 import { z } from "zod";
 
 export const categorySchema = z.object({
-  name: z.string().min(3),
-  parentCategoryId: z.string().min(1, "Parent category is required"),
+  name: z.string().min(1, {
+    message: "This is required",
+  }),
+  parentCategoryId: z.string().min(1, {
+    message: "This is required",
+  }),
 });
