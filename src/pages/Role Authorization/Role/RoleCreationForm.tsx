@@ -32,8 +32,13 @@ const RoleCreationForm = ({ operation }: any) => {
     },
   });
 
-  const { data, isLoading } = useFetchData(["role", selectedId], () =>
-    getRole(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["role", selectedId],
+    () => getRole(selectedId),
+    {
+      queryKey: ["role", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const role: ROLE | null = data?.data ?? null;
 

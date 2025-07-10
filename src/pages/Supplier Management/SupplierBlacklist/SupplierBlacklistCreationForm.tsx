@@ -44,7 +44,11 @@ const SupplierBlacklistCreationForm = ({ operation }: any) => {
 
   const { data, isLoading } = useFetchData(
     ["supplier-blacklist", selectedId],
-    () => getSupplierBlacklist(selectedId)
+    () => getSupplierBlacklist(selectedId),
+    {
+      queryKey: ["supplier-blacklist", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const supplierBlacklist: SUPPLIER_BLACKLIST | null = data?.data ?? null;
 

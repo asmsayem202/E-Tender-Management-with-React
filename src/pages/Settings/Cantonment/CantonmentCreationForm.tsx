@@ -37,8 +37,13 @@ const CantonmentCreationForm = ({ operation }: any) => {
     },
   });
 
-  const { data, isLoading } = useFetchData(["cantonment", selectedId], () =>
-    getCantonment(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["cantonment", selectedId],
+    () => getCantonment(selectedId),
+    {
+      queryKey: ["cantonment", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const cantonment: CANTONMENT | null = data?.data ?? null;
 

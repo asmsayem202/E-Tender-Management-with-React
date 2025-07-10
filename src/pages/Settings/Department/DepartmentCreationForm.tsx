@@ -36,8 +36,13 @@ const DepartmentCreationForm = ({ operation }: any) => {
     },
   });
 
-  const { data, isLoading } = useFetchData(["department", selectedId], () =>
-    getDepartment(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["department", selectedId],
+    () => getDepartment(selectedId),
+    {
+      queryKey: ["department", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const department: DEPARTMENT | null = data?.data ?? null;
 

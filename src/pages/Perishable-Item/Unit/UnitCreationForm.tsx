@@ -34,8 +34,13 @@ const UnitCreationForm = ({ operation }: any) => {
     },
   });
 
-  const { data, isLoading } = useFetchData(["unit", selectedId], () =>
-    getUnit(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["unit", selectedId],
+    () => getUnit(selectedId),
+    {
+      queryKey: ["unit", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const unit: UNIT | null = data?.data ?? null;
 

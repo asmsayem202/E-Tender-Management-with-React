@@ -60,8 +60,13 @@ const SupplierCreationForm = ({ operation }: any) => {
     },
   });
 
-  const { data, isLoading } = useFetchData(["supplier", selectedId], () =>
-    getSupplier(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["supplier", selectedId],
+    () => getSupplier(selectedId),
+    {
+      queryKey: ["supplier", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const supplier: SUPPLIER | null = data?.data ?? null;
 

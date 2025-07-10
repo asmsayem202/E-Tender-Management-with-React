@@ -41,7 +41,11 @@ const SupplierWarningCreationForm = ({ operation }: any) => {
 
   const { data, isLoading } = useFetchData(
     ["supplier-warning", selectedId],
-    () => getSupplierWarning(selectedId)
+    () => getSupplierWarning(selectedId),
+    {
+      queryKey: ["supplier-warning", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const supplierWarning: SUPPLIER_WARNING | null = data?.data ?? null;
 

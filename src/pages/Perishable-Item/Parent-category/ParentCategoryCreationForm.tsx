@@ -38,7 +38,11 @@ const ParentCategoryCreationForm = ({ operation }: any) => {
 
   const { data, isLoading } = useFetchData(
     ["parent-category", selectedId],
-    () => getParentCategory(selectedId)
+    () => getParentCategory(selectedId),
+    {
+      queryKey: ["parent-category", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const parentCategory: PARENT_CATEGORY | null = data?.data ?? null;
 

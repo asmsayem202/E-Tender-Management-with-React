@@ -40,8 +40,13 @@ const CategoryCreationForm = ({ operation }: any) => {
     },
   });
 
-  const { data, isLoading } = useFetchData(["category", selectedId], () =>
-    getCategory(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["category", selectedId],
+    () => getCategory(selectedId),
+    {
+      queryKey: ["category", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const category: CATEGORY | null = data?.data ?? null;
 

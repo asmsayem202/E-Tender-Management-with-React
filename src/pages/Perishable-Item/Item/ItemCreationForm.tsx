@@ -41,8 +41,13 @@ const ItemCreationForm = ({ operation }: any) => {
     },
   });
 
-  const { data, isLoading } = useFetchData(["item", selectedId], () =>
-    getItem(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["item", selectedId],
+    () => getItem(selectedId),
+    {
+      queryKey: ["item", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const item: ITEM | null = data?.data ?? null;
 

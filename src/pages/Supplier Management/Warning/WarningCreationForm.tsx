@@ -32,8 +32,13 @@ const WarningCreationForm = ({ operation }: any) => {
     },
   });
 
-  const { data, isLoading } = useFetchData(["warning", selectedId], () =>
-    getWarning(selectedId)
+  const { data, isLoading } = useFetchData(
+    ["warning", selectedId],
+    () => getWarning(selectedId),
+    {
+      queryKey: ["warning", selectedId],
+      enabled: selectedId !== null,
+    }
   );
   const warning: WARNING | null = data?.data ?? null;
 
