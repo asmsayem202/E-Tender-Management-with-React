@@ -149,15 +149,9 @@ const data = {
       icon: FolderGit,
       items: [
         {
-          title: "Format",
-          active: "format",
-          url: "tender/format",
-          icon: SquareChartGantt,
-        },
-        {
-          title: "Price",
-          active: "price-list",
-          url: "tender/price-list",
+          title: "Guideline",
+          active: "guideline-list",
+          url: "tender/guideline-list",
           icon: SquareChartGantt,
         },
         {
@@ -168,8 +162,8 @@ const data = {
         },
         {
           title: "Tender",
-          active: "tender",
-          url: "tender/tender",
+          active: "tender-list",
+          url: "tender/tender-list",
           icon: SquareChartGantt,
         },
       ],

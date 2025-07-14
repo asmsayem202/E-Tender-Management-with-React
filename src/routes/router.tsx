@@ -24,6 +24,8 @@ import SupplierBlacklistListPage from "@/pages/Supplier Management/SupplierBlack
 import FactorListPage from "@/pages/Reasonable Rate/Factor/FactorListPage";
 import MarketListPage from "@/pages/Reasonable Rate/Markets/MarketListPage";
 import MarketPriceListPage from "@/pages/Reasonable Rate/Market Price/MarketPriceListPage";
+import GuidelineListPage from "@/pages/Tender Management/Guideline/GuidelineListPage";
+import GuidelineCreationForm from "@/pages/Tender Management/Guideline/GuidelineCreationForm";
 
 export const router = createBrowserRouter([
   {
@@ -101,6 +103,18 @@ export const router = createBrowserRouter([
       {
         path: "reasonable-rate/market-rate-list",
         element: <MarketPriceListPage />,
+      },
+      {
+        path: "tender/guideline-list",
+        element: <GuidelineListPage />,
+      },
+      {
+        path: "tender/guideline-list/dashboard/guideline-creation",
+        element: <GuidelineCreationForm operation="create" />,
+      },
+      {
+        path: "tender/guideline-list/dashboard/guideline-creation/:id",
+        element: <GuidelineCreationForm operation="update" />,
       },
       {
         path: "setting/cantonment-list",
