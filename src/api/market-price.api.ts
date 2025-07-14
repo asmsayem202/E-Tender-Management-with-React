@@ -20,3 +20,6 @@ export const updateMarketPrice = ({
 
 export const deleteMarketPrice = (id: number) =>
   api_instance.delete(`MarketPriceEntry/DeleteMarketPrice/${id}`);
+
+export const getItemMarketPrice = (itemId: number) =>
+  api_instance.get(`MarketPriceEntry/GetItemMarketPrice/${itemId}`);

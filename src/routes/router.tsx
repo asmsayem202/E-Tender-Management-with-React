@@ -26,6 +26,7 @@ import MarketListPage from "@/pages/Reasonable Rate/Markets/MarketListPage";
 import MarketPriceListPage from "@/pages/Reasonable Rate/Market Price/MarketPriceListPage";
 import GuidelineListPage from "@/pages/Tender Management/Guideline/GuidelineListPage";
 import GuidelineCreationForm from "@/pages/Tender Management/Guideline/GuidelineCreationForm";
+import ReasonablePriceListPage from "@/pages/Reasonable Rate/Reasonable Rate/ReasonablePriceListPage";
 
 export const router = createBrowserRouter([
   {
@@ -103,6 +104,10 @@ export const router = createBrowserRouter([
       {
         path: "reasonable-rate/market-rate-list",
         element: <MarketPriceListPage />,
+      },
+      {
+        path: "reasonable-rate/reasonable-rate-list",
+        element: <ReasonablePriceListPage />,
       },
       {
         path: "tender/guideline-list",
