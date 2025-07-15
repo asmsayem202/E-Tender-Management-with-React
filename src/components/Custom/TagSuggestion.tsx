@@ -45,7 +45,7 @@ const TagSuggestion = <T,>({
         <div className="relative flex-1">
           {children}
           <div
-            className={`w-full max-h-40 bg-background dark:bg-[#1c1c1c] absolute left-0 mt-2 rounded-md overflow-hidden shadow-lg overflow-y-scroll-auto custom_scroll z-20 border border-input ${
+            className={`w-full max-h-40 bg-background dark:bg-[#1c1c1c] absolute left-0 mt-2 rounded-md shadow-lg overflow-y-auto custom_scroll z-20 border border-input ${
               showSuggestion ? "block" : "hidden"
             }`}
           >
