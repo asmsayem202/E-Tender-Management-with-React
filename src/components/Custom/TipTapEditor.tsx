@@ -1,5 +1,27 @@
 import { EditorContent } from "@tiptap/react";
 import { useEffect, useState } from "react";
+import {
+  Bold,
+  Italic,
+  Underline,
+  Highlighter,
+  Heading1,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  Link,
+  Undo,
+  Redo,
+  Eraser,
+  Strikethrough,
+  Code,
+  Quote,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+} from "lucide-react";
 
 const TiptapEditor = ({ editor }: any) => {
   const [showPreview, setShowPreview] = useState(false);
@@ -42,22 +64,25 @@ const TiptapEditor = ({ editor }: any) => {
           <MenuButton
             isActive={editor.isActive("bold")}
             onClick={() => editor.chain().focus().toggleBold().run()}
-            label="Bold"
+            label={<Bold size={18} />}
           />
+
           <MenuButton
             isActive={editor.isActive("italic")}
             onClick={() => editor.chain().focus().toggleItalic().run()}
-            label="Italic"
+            label={<Italic size={18} />}
           />
+
           <MenuButton
             isActive={editor.isActive("underline")}
             onClick={() => editor.chain().focus().toggleUnderline().run()}
-            label="Underline"
+            label={<Underline size={18} />}
           />
+
           <MenuButton
             isActive={editor.isActive("highlight")}
             onClick={() => editor.chain().focus().toggleHighlight().run()}
-            label="Highlight"
+            label={<Highlighter size={18} />}
           />
 
           {/* Headings */}
@@ -66,92 +91,94 @@ const TiptapEditor = ({ editor }: any) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
-            label="H1"
+            label={<Heading1 size={18} />}
           />
           <MenuButton
             isActive={editor.isActive("heading", { level: 2 })}
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
-            label="H2"
+            label={<Heading2 size={18} />}
           />
           <MenuButton
             isActive={editor.isActive("heading", { level: 3 })}
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
             }
-            label="H3"
+            label={<Heading3 size={18} />}
           />
 
-          {/* Lists */}
+          {/* Lists, Links, Undo/Redo, Clear */}
           <MenuButton
             isActive={editor.isActive("bulletList")}
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            label="Bullet"
+            label={<List size={18} />}
           />
+
           <MenuButton
             isActive={editor.isActive("orderedList")}
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            label="Numbered"
+            label={<ListOrdered size={18} />}
           />
 
-          {/* Links & Image */}
           <MenuButton
             isActive={editor.isActive("link")}
             onClick={setLink}
-            label="Link"
+            label={<Link size={18} />}
           />
 
-          {/* Undo / Redo */}
           <MenuButton
             isActive={false}
             onClick={() => editor.chain().focus().undo().run()}
-            label="Undo"
+            label={<Undo size={18} />}
           />
+
           <MenuButton
             isActive={false}
             onClick={() => editor.chain().focus().redo().run()}
-            label="Redo"
+            label={<Redo size={18} />}
           />
 
-          {/* Clear */}
           <MenuButton
             isActive={false}
             onClick={() =>
               editor.chain().focus().clearNodes().unsetAllMarks().run()
             }
-            label="Clear"
+            label={<Eraser size={18} />}
+          />
+
+          {/* Strike, Code Block, Quote */}
+          <MenuButton
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            label={<Strikethrough size={18} />}
           />
 
           <MenuButton
-            onClick={() => editor.chain().focus().toggleStrike().run()}
-            label="Strike"
-          />
-          <MenuButton
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            label="Code"
+            label={<Code size={18} />}
           />
+
           <MenuButton
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            label="Quote"
+            label={<Quote size={18} />}
           />
 
           {/* Alignment */}
           <MenuButton
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
-            label="Left"
+            label={<AlignLeft size={18} />}
           />
           <MenuButton
             onClick={() => editor.chain().focus().setTextAlign("center").run()}
-            label="Center"
+            label={<AlignCenter size={18} />}
           />
           <MenuButton
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
-            label="Right"
+            label={<AlignRight size={18} />}
           />
           <MenuButton
             onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-            label="Justify"
+            label={<AlignJustify size={18} />}
           />
         </div>
 

@@ -3,11 +3,10 @@ import {
   getTenderGuideline,
   updateTenderGuideline,
 } from "@/api/tender-guideline.api";
-import { Button } from "@/components/ui/button";
 import useFetchData from "@/hooks/useFetchData";
 import type { TENDER_GUIDELINE } from "@/types/tender-guideline.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeftIcon, Loader2 } from "lucide-react";
+import { ArrowLeftIcon, Loader2, SaveIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -27,12 +26,16 @@ import TextAlign from "@tiptap/extension-text-align";
 import Strike from "@tiptap/extension-strike";
 import CodeBlock from "@tiptap/extension-code-block";
 import Blockquote from "@tiptap/extension-blockquote";
+import AlertLoadingModal from "@/components/Custom/AlertLoadingModal";
+import IconButton from "@/components/Custom/IconButton";
+import { Input } from "@/components/ui/input";
 
 const GuidelineCreationForm = ({ operation }: any) => {
   const navigate = useNavigate();
   const query = useQueryClient();
   const { id } = useParams();
   const [name, setName] = useState("");
+  const [modal, setModal] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -69,7 +72,7 @@ const GuidelineCreationForm = ({ operation }: any) => {
     () => getTenderGuideline(id),
     {
       queryKey: ["tender-guideline", id],
-      enabled: id !== null,
+      enabled: !!id,
     }
   );
   const tenderGuideline: TENDER_GUIDELINE | null = data?.data ?? null;
@@ -134,7 +137,49 @@ const GuidelineCreationForm = ({ operation }: any) => {
           <span>Back</span>
         </div>
         <div>
-          <Button>{operation === "update" ? "Update" : "Save"}</Button>
+          <AlertLoadingModal
+            open={modal}
+            onOpenChange={setModal}
+            trigger={
+              <IconButton icon={<SaveIcon />}>
+                {operation === "create" ? "Save" : "Update"}
+              </IconButton>
+            }
+            title="GuidLine Name"
+            description={
+              <div className="flex flex-col gap-4">
+                <Input
+                  value={name}
+                  placeholder="Enter Name"
+                  onChange={(e) => setName(e?.target?.value)}
+                />
+              </div>
+            }
+            actionButton={
+              <IconButton
+                isPending={createMutation.isPending ?? updateMutation.isPending}
+                onClick={() => {
+                  if (operation === "create") {
+                    createMutation.mutate({
+                      name,
+                      formatStructure: editor ? editor.getHTML() : "",
+                    });
+                  } else {
+                    updateMutation.mutate({
+                      id: id,
+                      data: {
+                        name,
+                        formatStructure: editor ? editor.getHTML() : "",
+                      },
+                    });
+                  }
+                }}
+                icon={<SaveIcon />}
+              >
+                {operation === "create" ? "Save" : "Update"}
+              </IconButton>
+            }
+          />
         </div>
       </div>
       <TiptapEditor editor={editor} />
