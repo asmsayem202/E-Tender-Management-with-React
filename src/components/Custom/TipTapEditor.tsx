@@ -1,56 +1,12 @@
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import Underline from "@tiptap/extension-underline";
-import Heading from "@tiptap/extension-heading";
-import Link from "@tiptap/extension-link";
-import Image from "@tiptap/extension-image";
-import Highlight from "@tiptap/extension-highlight";
-import { TextStyle } from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
-import TextAlign from "@tiptap/extension-text-align";
-import Strike from "@tiptap/extension-strike";
-import CodeBlock from "@tiptap/extension-code-block";
-import Blockquote from "@tiptap/extension-blockquote";
+import { EditorContent } from "@tiptap/react";
 import { useEffect, useState } from "react";
 
-const TiptapEditor = () => {
+const TiptapEditor = ({ editor }: any) => {
   const [showPreview, setShowPreview] = useState(false);
   const [html, setHtml] = useState("");
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [1, 2, 3] },
-      }),
-      Bold,
-      Italic,
-      Underline,
-      Heading,
-      Link.configure({ openOnClick: false }),
-      Image,
-      Highlight,
-      TextStyle,
-      Color,
-      TextAlign.configure({
-        types: ["heading", "paragraph"],
-      }),
-      Strike,
-      CodeBlock,
-      Blockquote,
-      // LineHeight,
-    ],
-    content: `<p class='text-gray-200'>Start writing here...</p>`,
-    editorProps: {
-      attributes: {
-        class: "focus:outline-none min-h-[500px] min-w-full",
-      },
-    },
-  });
-
   useEffect(() => {
-    if (!editor) return; // Return void instead of undefined
+    if (!editor && !showPreview) return; // Return void instead of undefined
 
     const update = () => setHtml(editor.getHTML());
     update();
@@ -60,6 +16,8 @@ const TiptapEditor = () => {
       editor.off("update", update);
     };
   }, [editor]);
+
+  if (!editor) return null;
 
   const setLink = () => {
     const url = window.prompt("Enter link URL");
@@ -73,20 +31,6 @@ const TiptapEditor = () => {
     }
   };
 
-  const saveContent = () => {
-    if (!editor) return;
-
-    // Get JSON
-    const jsonData = editor.getJSON();
-
-    // Or get HTML
-    const htmlData = editor.getHTML();
-
-    console.log("Save JSON:", jsonData);
-    console.log("Save HTML:", htmlData);
-
-    // send jsonData or htmlData to backend API here
-  };
   if (!editor) return null;
 
   return (
@@ -233,12 +177,6 @@ const TiptapEditor = () => {
           >
             {showPreview ? "Hide Preview" : "Show Preview"}
           </button>
-          <button
-            onClick={saveContent}
-            className="px-4 py-2 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive cursor-pointer bg-primary text-primary-foreground shadow-xs hover:bg-primary/90"
-          >
-            Save
-          </button>
         </div>
         {/* Conditionally show preview */}
         {showPreview && (
@@ -247,12 +185,6 @@ const TiptapEditor = () => {
               id="preview-content"
               className="preview-content"
               dangerouslySetInnerHTML={{ __html: html }}
-              style={
-                {
-                  // lineHeight: "1.8",
-                  // fontSize: "16px",
-                }
-              }
             />
           </div>
         )}

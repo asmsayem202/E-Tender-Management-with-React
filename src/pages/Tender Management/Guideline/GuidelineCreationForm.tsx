@@ -3,31 +3,64 @@ import {
   getTenderGuideline,
   updateTenderGuideline,
 } from "@/api/tender-guideline.api";
-import TiptapEditor from "@/components/Custom/TipTapEditor";
 import { Button } from "@/components/ui/button";
 import useFetchData from "@/hooks/useFetchData";
-import { tenderGuidelineSchema } from "@/schema/tender-guideline.schema";
 import type { TENDER_GUIDELINE } from "@/types/tender-guideline.type";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeftIcon, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import TiptapEditor from "@/components/Custom/TipTapEditor";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import Underline from "@tiptap/extension-underline";
+import Heading from "@tiptap/extension-heading";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import Highlight from "@tiptap/extension-highlight";
+import { TextStyle } from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import TextAlign from "@tiptap/extension-text-align";
+import Strike from "@tiptap/extension-strike";
+import CodeBlock from "@tiptap/extension-code-block";
+import Blockquote from "@tiptap/extension-blockquote";
 
 const GuidelineCreationForm = ({ operation }: any) => {
   const navigate = useNavigate();
+  const query = useQueryClient();
   const { id } = useParams();
   const [name, setName] = useState("");
-  const [formatStructure, setFormatStructure] = useState("");
-  const query = useQueryClient();
 
-  const form = useForm({
-    resolver: zodResolver(tenderGuidelineSchema),
-    defaultValues: {
-      name: "",
-      formatStructure: "",
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        heading: { levels: [1, 2, 3] },
+      }),
+      Bold,
+      Italic,
+      Underline,
+      Heading,
+      Link.configure({ openOnClick: false }),
+      Image,
+      Highlight,
+      TextStyle,
+      Color,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      Strike,
+      CodeBlock,
+      Blockquote,
+      // LineHeight,
+    ],
+    content: `<p class='text-gray-200'>Start writing here...</p>`,
+    editorProps: {
+      attributes: {
+        class: "focus:outline-none min-h-[500px] min-w-full",
+      },
     },
   });
 
@@ -42,13 +75,13 @@ const GuidelineCreationForm = ({ operation }: any) => {
   const tenderGuideline: TENDER_GUIDELINE | null = data?.data ?? null;
 
   useEffect(() => {
-    if (operation === "update") {
-      form.reset({
-        name: tenderGuideline?.name || "",
-        formatStructure: tenderGuideline?.formatStructure || "",
-      });
+    if (id && operation === "update") {
+      setName(tenderGuideline?.name || "");
+      if (editor && tenderGuideline?.formatStructure) {
+        editor.commands.setContent(tenderGuideline.formatStructure);
+      }
     }
-  }, [operation, id, tenderGuideline, form]);
+  }, [operation, id, tenderGuideline]);
 
   const createMutation = useMutation({
     mutationFn: createTenderGuideline,
@@ -61,11 +94,6 @@ const GuidelineCreationForm = ({ operation }: any) => {
       const err = error as {
         response?: { data?: { message?: string; errors: any } };
       };
-      const errorObject: any = err.response?.data?.errors;
-      for (const property in errorObject) {
-        const errorMessage = Object.values(errorObject[property]).join("");
-        form.setError(property as any, { message: errorMessage });
-      }
       toast.error(err.response?.data?.message || "An error occurred");
     },
   });
@@ -81,11 +109,6 @@ const GuidelineCreationForm = ({ operation }: any) => {
       const err = error as {
         response?: { data?: { message?: string; errors: any } };
       };
-      const errorObject: any = err.response?.data?.errors;
-      for (const property in errorObject) {
-        const errorMessage = Object.values(errorObject[property]).join("");
-        form.setError(property as any, { message: errorMessage });
-      }
       toast.error(err.response?.data?.message || "An error occurred");
     },
   });
@@ -114,7 +137,7 @@ const GuidelineCreationForm = ({ operation }: any) => {
           <Button>{operation === "update" ? "Update" : "Save"}</Button>
         </div>
       </div>
-      <TiptapEditor />
+      <TiptapEditor editor={editor} />
     </React.Fragment>
   );
 };
