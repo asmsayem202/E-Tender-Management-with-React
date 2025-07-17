@@ -12,6 +12,7 @@ type AlertModalType = {
 type State = {
   user: any;
   drawer: any;
+  modal: any;
   alertModal: Partial<AlertModalType>;
   selectedId: any;
   selectedData: any;
@@ -21,6 +22,8 @@ type Actions = {
   setUser: (user: any) => void;
   openDrawer: (currentDrawer: any) => void;
   closeDrawer: () => void;
+  openModal: (currentModal: any) => void;
+  closeModal: () => void;
   openAlertModal: (config: AlertModalType) => void;
   closeAlertModal: () => void;
   setSelectedId: (id: any) => void;
@@ -30,6 +33,7 @@ type Actions = {
 export const useGlobalStore = create<State & Actions>((set) => ({
   user: JSON.parse(localStorage.getItem("Etender-user") || "{}"),
   drawer: null,
+  modal: null,
   alertModal: false,
   selectedId: null,
   selectedData: null,
@@ -53,6 +57,19 @@ export const useGlobalStore = create<State & Actions>((set) => ({
       selectedId: null,
     }),
 
+  openModal: (currentModal) => {
+    set({
+      modal: `${currentModal}`,
+    });
+  },
+
+  closeModal: () =>
+    set({
+      modal: null,
+      selectedData: null,
+      selectedId: null,
+    }),
+
   openAlertModal: (config: AlertModalType) =>
     set({
       alertModal: {
@@ -67,6 +84,7 @@ export const useGlobalStore = create<State & Actions>((set) => ({
         isOpen: false,
       },
       selectedId: null,
+      selectedData: null,
     }),
 
   setSelectedId: (id) =>
