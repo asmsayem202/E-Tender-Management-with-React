@@ -40,14 +40,14 @@ const GlobalPageModal = ({
           } !max-w-none overflow-y-auto bg-card text-card-foreground flex flex-col gap-3 transition-all ease-in-out duration-150 `}
         >
           <DialogHeader className="w-full bg-muted text-muted-foreground mb-0 sticky top-0 z-[99999]">
-            <div className="flex items-start justify-between">
+            <div className="flex items-center justify-between">
               <div className="p-6">
                 {title && <DialogTitle>{title}</DialogTitle>}
                 {description && (
                   <DialogDescription>{description}</DialogDescription>
                 )}
               </div>
-              <div className="flex items-start gap-3 m-3 ">
+              <div className="flex gap-3 m-3 ">
                 {buttonStack}
                 {isFull ? (
                   <Button
@@ -79,9 +79,7 @@ const GlobalPageModal = ({
               </div>
             </div>
           </DialogHeader>
-          <div className="p-5 bg-muted text-muted-foreground h-full">
-            {children}
-          </div>
+          <div className="p-5 h-full">{children}</div>
         </DialogContent>
       </Dialog>
     );
