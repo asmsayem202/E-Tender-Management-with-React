@@ -108,7 +108,7 @@ const TiptapEditor = ({ editor }: any) => {
   return (
     <div>
       <div className="p-4 border rounded-xl bg-secondary space-y-4">
-        <div className="flex flex-wrap gap-2 border-b pb-2">
+        <div className="sticky top-0 z-10 bg-secondary flex flex-wrap gap-2 border-b pb-2">
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={buttonClass(activeFormats.bold)}

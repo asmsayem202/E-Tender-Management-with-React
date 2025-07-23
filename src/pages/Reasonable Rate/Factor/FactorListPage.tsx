@@ -89,7 +89,7 @@ const FactorListPage = () => {
         columns={[
           {
             accessorKey: "name",
-            header: "Name",
+            header: "Factor Name",
           },
           {
             accessorKey: "percentageRate",

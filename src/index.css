@@ -43,7 +43,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-:root {
+/* :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -76,7 +76,66 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+} */
+
+:root {
+  --radius: 0.625rem;
+
+  /* Background stays white */
+  --background: oklch(1 0 0);
+  /* white */
+  --foreground: oklch(0.145 0 0);
+  /* dark text */
+
+  /* Card / Popover */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+
+  /* Primary: deep green */
+  --primary: oklch(46.365% 0.10072 162.67);
+  /* deep green */
+  --primary-foreground: oklch(0.98 0.05 145);
+  /* light greenish-white */
+
+  /* Secondary (optional: soft green) */
+  /* pale green */
+  --secondary-foreground: oklch(0.25 0.15 145);
+
+  /* Muted & Accent: soft variations of green */
+  --muted: oklch(94.971% 0.03675 175.459);
+  --muted-foreground: oklch(0.4 0.05 145);
+  --accent: oklch(0.9 0.03 145);
+  --accent-foreground: oklch(0.25 0.15 145);
+
+  /* Destructive (leave red for contrast) */
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* Borders and inputs (light greyish) */
+  --border: oklch(0.92 0 0);
+  --input: oklch(0.92 0 0);
+  --ring: oklch(0.6 0.02 145);
+
+  /* Chart colors (optional green palette) */
+  --chart-1: 145 10% 90%;
+  --chart-2: 145 10% 70%;
+  --chart-3: 145 10% 50%;
+  --chart-4: 145 10% 30%;
+  --chart-5: 145 10% 15%;
+
+  /* Sidebar (white with green accents) */
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.25 0.15 145);
+  --sidebar-primary-foreground: oklch(0.98 0.05 145);
+  --sidebar-accent: oklch(95.574% 0.02961 161.304);
+  --sidebar-accent-foreground: oklch(0.25 0.15 145);
+  --sidebar-border: oklch(0.92 0 0);
+  --sidebar-ring: oklch(0.6 0.02 145);
 }
+
+
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -116,6 +175,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
