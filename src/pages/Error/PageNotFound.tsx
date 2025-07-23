@@ -11,10 +11,10 @@ const PageNotFound = () => {
     <div className="min-h-screen  overflow-y-auto flex justify-center items-center p-10">
       <div className="w-full flex flex-col items-center">
         <div className="mt-16 text-center">
-          <div className="text-2xl md:text-4xl lg:text-5xl font-semibold text-primary-foreground">
+          <div className="text-2xl md:text-4xl lg:text-5xl font-semibold text-black">
             Ops! Page Not Found
           </div>
-          <div className="mt-3 text-primary-foreground text-sm md:text-base">
+          <div className="mt-3 text-black text-sm md:text-base">
             The page you are looking for might have been removed had <br /> its
             name changed or is temporarily unavailable.
           </div>
