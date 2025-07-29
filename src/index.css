@@ -101,6 +101,7 @@
 
   /* Secondary (optional: soft green) */
   /* pale green */
+  --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.25 0.15 145);
 
   /* Muted & Accent: soft variations of green */
